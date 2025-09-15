@@ -74,7 +74,10 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   };
   // Mini view: compact horizontal card for scrollers
   if (viewMode === "mini") {
-    const topImage = (isFeatured || isEvent) && app.imageUrl ? app.imageUrl : app.iconUrl;
+      const topImage =
+    (isFeatured || isEvent) && app.screenshotUrls?.[0]
+      ? app.screenshotUrls[0]
+      : app.iconUrl;
     return (
       <>
         <Card
