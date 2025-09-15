@@ -315,7 +315,7 @@ const gap = parseFloat(gapStr);
 
               <CardContent className="p-3" style={{ backgroundColor: "#D1E2EA" }}>
                 {/* App Icon and Basic Info */}
-                <div className="flex items-start space-x-2 mb-2">
+                <div className="flex items-start space-x-4 mb-4">
                   <Image
                     src={item.iconUrl}
                     alt={item.name}

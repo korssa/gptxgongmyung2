@@ -333,7 +333,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
 
         <CardContent className="p-3" style={{ backgroundColor: '#D1E2EA' }}>
           {/* App Icon and Basic Info */}
-          <div className="flex items-start space-x-3 mb-2">
+          <div className="flex items-start space-x-4 mb-4">
             <Image
               src={app.iconUrl}
               alt={app.name}
