@@ -351,9 +351,9 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               }}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-xl sm:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
-              <p className="text-base sm:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
-            </div>
+              <h3 className="font-bold text-lg sm:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
+           <p className="text-sm sm:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
+      </div>
           </div>
 
           {/* Rating and Stats */}
