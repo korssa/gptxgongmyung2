@@ -283,33 +283,35 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[340px] aspect-[4/5]"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-full max-w-sm"
         style={{ backgroundColor: '#D1E2EA' }}
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
-          {/* Screenshot/App Preview */}
-          <div className="aspect-square overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
-            {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
-              <Image
-                src={app.screenshotUrls[0]}
-                alt={app.name}
-                fill
-                unoptimized={isBlobUrl(app.screenshotUrls?.[0])}
-                className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
-              />
-            ) : (
-              <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
-                📱
+          {/* Screenshot/App Preview (match New Release: fixed 310x310 box) */}
+          <div className="relative pt-3">
+            <div className="mx-auto w-[310px] h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-2">
+              <div className="relative w-full h-full overflow-hidden rounded-lg">
+                {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
+                  <Image
+                    src={app.screenshotUrls[0]}
+                    alt={app.name}
+                    fill
+                    unoptimized={isBlobUrl(app.screenshotUrls?.[0])}
+                    className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
+                    📱
+                  </div>
+                )}
+                <div className="absolute bottom-1 left-1">
+                  <Badge className={`${getStatusColor(app.status)} text-white text-xs`}>
+                    {app.status}
+                  </Badge>
+                </div>
               </div>
-            )}
-          </div>
-
-          {/* Store Badge */}
-          <div className="absolute bottom-2 left-2">
-            <Badge className={`${getStatusColor(app.status)} text-white text-xs`}>
-              {app.status}
-            </Badge>
+            </div>
           </div>
 
           {/* Admin Actions Button - 호버 시 표시 */}
@@ -329,28 +331,28 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           )}
         </div>
 
-        <CardContent className="px-2 py-0 -mt-1" style={{ backgroundColor: '#D1E2EA' }}>
+        <CardContent className="p-3" style={{ backgroundColor: '#D1E2EA' }}>
           {/* App Icon and Basic Info */}
           <div className="flex items-start space-x-3 mb-2">
             <Image
               src={app.iconUrl}
               alt={app.name}
-              width={64}
-              height={64}
-              className="w-16 h-16 rounded-xl object-cover object-center flex-shrink-0"
+              width={80}
+              height={80}
+              className="w-20 h-20 rounded-xl object-cover object-center flex-shrink-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
               }}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-lg mb-1 truncate notranslate app-name-fixed" translate="no">{app.name}</h3>
-              <p className="text-sm text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
+              <h3 className="font-bold text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
+              <p className="text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
             </div>
           </div>
 
           {/* Rating and Stats */}
-          <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
+          <div className="flex items-center justify-between text-base text-muted-foreground mb-4">
             <div className="flex items-center space-x-3">
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -363,14 +365,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
 
           {/* Tags */}
           {app.tags && app.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
+            <div className="flex flex-wrap gap-2 mb-4">
               {app.tags.slice(0, 2).map((tag, index) => (
-                <Badge key={index} variant="secondary" className="text-sm px-2 py-0.5">
+                <Badge key={index} variant="secondary" className="text-base px-3 py-1">
                   {tag}
                 </Badge>
               ))}
               {app.tags.length > 2 && (
-                <span className="text-sm text-muted-foreground">
+                <span className="text-base text-muted-foreground">
                   +{app.tags.length - 2}
                 </span>
               )}
@@ -378,15 +380,15 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           )}
         </CardContent>
 
-        {/* Download Section - CardContent 밖으로 이동 */}
-  <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-3 py-1 -mt-2">
+        {/* Download Section - align with New Release */}
+        <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-3 py-3">
           <div className="flex flex-col items-start space-y-0">
             {/* 하단 2줄 - 다운로드 버튼 */}
             <div className="w-full">
               {app.status === "published" ? (
                 <Button
                   size="sm"
-                  className="h-8 px-4 text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] justify-start"
+                  className="h-9 px-5 text-base bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] justify-start"
                   onClick={handleStoreView}
                 >
                   <Download className="h-4 w-4" />
@@ -395,7 +397,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               ) : (
                 <Button
                   size="sm"
-                  className="h-8 px-4 text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] justify-start"
+                  className="h-9 px-5 text-base bg-gray-500 text-white flex items-center gap-1 min-w-[140px] justify-start"
                   disabled
                 >
                   Coming soon
@@ -404,13 +406,13 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
             </div>
 
             {/* 하단 1줄 - 스토어 배지 */}
-            <div className="h-9">
+            <div className="h-10">
               <Image
                 src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
                 alt="스토어 배지"
-                width={120}
-                height={28}
-                className="h-9 object-contain"
+                width={140}
+                height={32}
+                className="h-10 object-contain"
               />
             </div>
           </div>

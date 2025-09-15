@@ -232,7 +232,7 @@ const gap = parseFloat(gapStr);
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[170px] flex-shrink-0 ${
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-full max-w-sm flex-shrink-0 ${
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
@@ -243,44 +243,47 @@ const gap = parseFloat(gapStr);
               onMouseEnter={blockTranslationFeedback}
             >
               <div className="relative">
-                {/* Screenshot/App Preview */}
-                <div className="w-full mx-auto">
-                  <div className="aspect-square overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
-                    {/* Numbering overlay for events */}
-                    {type === "events" && (
-                      <div className="absolute top-2 left-2 z-10">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-500/95 text-white flex items-center justify-center font-extrabold text-2xl sm:text-3xl shadow-lg border-2 border-white">
-                          {index + 1}
+                {/* Screenshot/App Preview - match New Release sizing (310x310 box) */}
+                <div className="relative pt-3">
+                  <div className="mx-auto w-[310px] h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-2">
+                    <div className="relative w-full h-full overflow-hidden rounded-lg">
+                      {/* Numbering overlay for events */}
+                      {type === "events" && (
+                        <div className="absolute top-2 left-2 z-10">
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-500/95 text-white flex items-center justify-center font-extrabold text-2xl sm:text-3xl shadow-lg border-2 border-white">
+                            {index + 1}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    {item.screenshotUrls && item.screenshotUrls.length > 0 ? (
-                      <Image
-                        src={item.screenshotUrls[0]}
-                        alt={item.name}
-                        fill
-                        unoptimized
-                        className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
-                        📱
-                      </div>
-                    )}
+                      )}
 
-                    {/* Status Badge (overlay on screenshot) */}
-                    <div className="absolute bottom-1 left-1">
-                      <Badge
-                        className={`text-white text-[10px] px-1 py-0.5 ${
-                          item.status === "published"
-                            ? "bg-green-500"
-                            : item.status === "in-review"
-                            ? "bg-orange-500"
-                            : "bg-gray-500"
-                        }`}
-                      >
-                        {item.status}
-                      </Badge>
+                      {item.screenshotUrls && item.screenshotUrls.length > 0 ? (
+                        <Image
+                          src={item.screenshotUrls[0]}
+                          alt={item.name}
+                          fill
+                          unoptimized
+                          className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
+                          📱
+                        </div>
+                      )}
+
+                      {/* Status Badge (overlay on screenshot) */}
+                      <div className="absolute bottom-1 left-1">
+                        <Badge
+                          className={`text-white text-[10px] px-1 py-0.5 ${
+                            item.status === "published"
+                              ? "bg-green-500"
+                              : item.status === "in-review"
+                              ? "bg-orange-500"
+                              : "bg-gray-500"
+                          }`}
+                        >
+                          {item.status}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -310,16 +313,16 @@ const gap = parseFloat(gapStr);
                 )}
               </div>
 
-              <CardContent className="px-1.5 py-0" style={{ backgroundColor: "#D1E2EA" }}>
+              <CardContent className="p-3" style={{ backgroundColor: "#D1E2EA" }}>
                 {/* App Icon and Basic Info */}
                 <div className="flex items-start space-x-2 mb-2">
                   <Image
                     src={item.iconUrl}
                     alt={item.name}
-                    width={64}
-                    height={64}
+                    width={80}
+                    height={80}
                     unoptimized
-                    className="w-16 h-16 rounded-xl object-cover object-center flex-shrink-0"
+                    className="w-20 h-20 rounded-xl object-cover object-center flex-shrink-0"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src =
@@ -327,18 +330,18 @@ const gap = parseFloat(gapStr);
                     }}
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-lg mb-1 truncate notranslate" translate="no">
+                    <h3 className="font-bold text-xl mb-1 truncate notranslate text-amber-400" translate="no">
                       {item.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground truncate notranslate" translate="no">
+                    <p className="text-base text-muted-foreground truncate notranslate" translate="no">
                       {item.developer}
                     </p>
                   </div>
                 </div>
 
                 {/* Rating and Stats */}
-                <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
-                  <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-between text-base text-muted-foreground mb-4">
+                  <div className="flex items-center space-x-3">
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                       <span>{item.rating}</span>
@@ -350,21 +353,21 @@ const gap = parseFloat(gapStr);
 
                 {/* Tags */}
                 {item.tags && item.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mb-3">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {item.tags.slice(0, 2).map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm px-2 py-0.5">
+                      <Badge key={index} variant="secondary" className="text-base px-3 py-1">
                         {tag}
                       </Badge>
                     ))}
                     {item.tags.length > 2 && (
-                      <span className="text-sm text-muted-foreground">+{item.tags.length - 2}</span>
+                      <span className="text-base text-muted-foreground">+{item.tags.length - 2}</span>
                     )}
                   </div>
                 )}
               </CardContent>
 
               {/* Download Section */}
-              <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-2">
+              <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-3 py-3">
                 <div className="flex flex-col items-start space-y-1 w-full">
                   {/* Download Button */}
                   <div className="w-full">
@@ -372,7 +375,7 @@ const gap = parseFloat(gapStr);
                       type === "events" ? (
                         <Button
                           size="sm"
-                          className="h-8 px-4 text-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[120px] justify-start"
+                          className="h-9 px-5 text-base bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[120px] justify-start"
                           onClick={() => {
                             if (item.storeUrl) {
                               window.open(item.storeUrl, "_blank");
@@ -385,7 +388,7 @@ const gap = parseFloat(gapStr);
                       ) : (
                         <Button
                           size="sm"
-                          className="h-8 px-4 text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[120px] justify-start"
+                          className="h-9 px-5 text-base bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[120px] justify-start"
                           onClick={() => {
                             if (item.storeUrl) {
                               window.open(item.storeUrl, "_blank");
@@ -399,7 +402,7 @@ const gap = parseFloat(gapStr);
                     ) : (
                       <Button
                         size="sm"
-                        className="h-8 px-4 text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[120px] justify-start"
+                        className="h-9 px-5 text-base bg-gray-500 text-white flex items-center gap-1 min-w-[120px] justify-start"
                         disabled
                       >
                         Coming soon
@@ -408,13 +411,13 @@ const gap = parseFloat(gapStr);
                   </div>
 
                   {/* Store Badge */}
-                  <div className="h-9">
+                  <div className="h-10">
                     <Image
                       src={item.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
                       alt="스토어 배지"
-                      width={120}
-                      height={28}
-                      className="h-9 object-contain"
+                      width={140}
+                      height={32}
+                      className="h-10 object-contain"
                     />
                   </div>
                 </div>
