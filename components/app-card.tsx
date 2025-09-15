@@ -74,6 +74,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   };
   // Mini view: compact horizontal card for scrollers
   if (viewMode === "mini") {
+    const topImage = (isFeatured || isEvent) && app.imageUrl ? app.imageUrl : app.iconUrl;
     return (
       <>
         <Card
@@ -83,11 +84,11 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center">
               <Image
-                src={app.imageUrl}
+                src={topImage}
                 alt={app.name}
                 width={72}
                 height={72}
-                unoptimized={isBlobUrl(app.iconUrl)}
+                unoptimized={isBlobUrl(topImage)}
                 className="rounded-md"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
