@@ -244,8 +244,8 @@ const gap = parseFloat(gapStr);
             >
               <div className="relative">
                 {/* Screenshot/App Preview - match New Release sizing (310x310 box) */}
-                <div className="relative pt-3">
-                  <div className="mx-auto w-[310px] h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-2">
+                <div className="relative pt-2">
+                  <div className="mx-auto w-[310px] h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-1">
                     <div className="relative w-full h-full overflow-hidden rounded-lg">
                       {/* Numbering overlay for events */}
                       {type === "events" && (
@@ -313,9 +313,9 @@ const gap = parseFloat(gapStr);
                 )}
               </div>
 
-              <CardContent className="p-3" style={{ backgroundColor: "#D1E2EA" }}>
+              <CardContent className="p-2" style={{ backgroundColor: "#D1E2EA" }}>
                 {/* App Icon and Basic Info */}
-                <div className="flex items-start space-x-4 mb-4">
+                <div className="flex items-start space-x-4 mb-3">
                   <Image
                     src={item.iconUrl}
                     alt={item.name}
@@ -340,7 +340,7 @@ const gap = parseFloat(gapStr);
                 </div>
 
                 {/* Rating and Stats */}
-                <div className="flex items-center justify-between text-base text-muted-foreground mb-4">
+                <div className="flex items-center justify-between text-base text-muted-foreground mb-3">
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -353,7 +353,7 @@ const gap = parseFloat(gapStr);
 
                 {/* Tags */}
                 {item.tags && item.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {item.tags.slice(0, 2).map((tag, index) => (
                       <Badge key={index} variant="secondary" className="text-base px-3 py-1">
                         {tag}
@@ -367,7 +367,7 @@ const gap = parseFloat(gapStr);
               </CardContent>
 
               {/* Download Section */}
-              <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-3 py-3">
+              <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-3 py-2">
                 <div className="flex flex-col items-start space-y-1 w-full">
                   {/* Download Button */}
                   <div className="w-full">
@@ -411,13 +411,13 @@ const gap = parseFloat(gapStr);
                   </div>
 
                   {/* Store Badge */}
-                  <div className="h-10">
+                  <div className="h-9">
                     <Image
                       src={item.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
                       alt="스토어 배지"
                       width={140}
-                      height={32}
-                      className="h-10 object-contain"
+                      height={28}
+                      className="h-9 object-contain"
                     />
                   </div>
                 </div>
