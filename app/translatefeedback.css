@@ -1,0 +1,105 @@
+/* 1. 피드백 풍선, 툴팁, 번역 개선 도움 숨김 */
+.goog-te-balloon-frame,
+.goog-te-ftab,
+.goog-tooltip,
+.goog-tooltip-popup,
+.goog-te-menu2-item[title*="improve"],
+.goog-te-menu2-item[title*="feedback"],
+.goog-te-menu2-item-check,
+.goog-te-spinner-pos {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 2. iframe 내부의 번역 도구 관련 팝업 숨김 */
+iframe[src*="translate.googleapis.com"] {
+  pointer-events: none !important;
+}
+
+/* 3. 메뉴 프레임 개선 */
+.goog-te-menu-frame {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* 4. 선택 메뉴 항목 */
+.goog-te-menu2-item {
+  background: transparent !important;
+  color: white !important;
+  font-size: 13px !important;
+  padding: 8px 14px !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.goog-te-menu2-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. 선택된 항목 강조 */
+.goog-te-menu2-item-selected {
+  background: rgba(255, 255, 255, 0.2) !important;
+  font-weight: bold !important;
+}
+
+/* 6. 드롭다운 텍스트 가독성 */
+.goog-te-combo,
+select.goog-te-combo {
+  color: white !important;
+  font-weight: 500 !important;
+  background-color: #4a7bc8 !important;
+  border: 1px solid #5d8fd4 !important;
+  border-radius: 6px !important;
+}
+
+
+/* 1. 툴팁 및 텍스트 강조 제거 */
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+  display: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 2. 팝업 suggestion / balloon 숨김 */
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+/* 3. Powered by 로고 및 가제트 숨김 */
+.goog-logo-link {
+  display: none !important;
+}
+.goog-te-gadget {
+  color: transparent !important;
+}
+
+/* 4. 상단 배너 완전 숨김 및 페이지 레이아웃 정상화 */
+body {
+  top: 0 !important;
+}
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+/* 8. .skiptranslate 클래스 완전 숨김 & 상단 공간 복원 */
+.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+/* 9. iframe.skiptranslate 숨김 */
+iframe.skiptranslate {
+  visibility: hidden !important;
+}
+
