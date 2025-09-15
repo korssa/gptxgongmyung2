@@ -320,10 +320,10 @@ const gap = parseFloat(gapStr);
                   <Image
                     src={item.iconUrl}
                     alt={item.name}
-                    width={54}
-                    height={54}
+                    width={80}
+                    height={80}
                     unoptimized
-                    className="w-[80px] h-[80px] sm:w-[54px] sm:h-[54px] rounded-xl object-cover object-center flex-shrink-0"
+                     className="w-[80px] h-[80px] sm:w-[64px] sm:h-[64px] rounded-2xl object-cover object-center flex-shrink-0"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src =
