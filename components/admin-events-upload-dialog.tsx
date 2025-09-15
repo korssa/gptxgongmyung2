@@ -188,7 +188,9 @@ export function AdminEventsUploadDialog({
         formDataToSend.append("store", formData.store || "google-play");
         formDataToSend.append("storeUrl", formData.storeUrl || "");
         formDataToSend.append("appCategory", formData.appCategory || "events");
-
+screenshotFiles.forEach((file, index) => {
+  formDataToSend.append(`screenshot_${index}`, file);
+});
         const response = await fetch(`/api/gallery?type=${targetGallery}`, {
           method: "POST",
           body: formDataToSend,
