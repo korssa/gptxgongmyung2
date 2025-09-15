@@ -382,9 +382,9 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
 
         {/* Download Section - align with New Release */}
         <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
-          <div className="flex flex-col items-start space-y-0">
+          <div className="flex flex-col items-start sm:items-center space-y-0 sm:space-y-1">
             {/* 하단 2줄 - 다운로드 버튼 */}
-            <div className="w-full">
+            <div className="w-full sm:w-auto">
               {app.status === "published" ? (
                 <Button
                   size="sm"

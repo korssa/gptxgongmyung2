@@ -368,9 +368,9 @@ const gap = parseFloat(gapStr);
 
               {/* Download Section */}
               <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
-                <div className="flex flex-col items-start space-y-1 w-full">
+                <div className="flex flex-col items-start sm:items-center space-y-1 w-full">
                   {/* Download Button */}
-                  <div className="w-full">
+                  <div className="w-full sm:w-auto">
                     {item.status === "published" ? (
                       type === "events" ? (
                         <Button
