@@ -61,7 +61,7 @@ export function GalleryManager({
     let amount = 0;
     if (isMobile) {
   const firstItem = el.firstElementChild as HTMLElement | null;
-  const itemWidth = firstItem?.offsetWidth ?? 340; // fallback to our widened card width
+  const itemWidth = firstItem?.offsetWidth ?? 320; // fallback aligns with sm breakpoint width
      const styles = getComputedStyle(el) as CSSStyleDeclaration;
 const gapStr = (styles.columnGap || styles.gap || "0").toString();
 const gap = parseFloat(gapStr);
@@ -232,7 +232,7 @@ const gap = parseFloat(gapStr);
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[340px] shrink-0 ${
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[300px] sm:w-[320px] lg:w-[340px] shrink-0 ${
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
@@ -245,7 +245,7 @@ const gap = parseFloat(gapStr);
               <div className="relative">
                 {/* Screenshot/App Preview */}
                 <div className="w-full mx-auto">
-                  <div className="w-[170px] h-[170px] max-w-full mx-auto overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
+                  <div className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] lg:w-[170px] lg:h-[170px] max-w-full mx-auto overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
                     {/* Numbering overlay for events */}
                     {type === "events" && (
                       <div className="absolute top-2 left-2 z-10">
