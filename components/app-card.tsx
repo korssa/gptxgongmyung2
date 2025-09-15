@@ -83,7 +83,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center">
               <Image
-                src={app.iconUrl}
+                src={app.imageUrl}
                 alt={app.name}
                 width={72}
                 height={72}
