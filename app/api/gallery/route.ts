@@ -237,7 +237,7 @@ export async function POST(request: NextRequest) {
 
       // 고유 ID 생성
       const id = `${type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-const file = formData.get('file') as File | null;
+
 
 if (!title || !content || !author) {
   return NextResponse.json({ error: '필수 필드가 누락되었습니다' }, { status: 400 });
