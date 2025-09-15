@@ -850,7 +850,7 @@ function HomeContent() {
                </div>
               
                             <div className="flex justify-center px-4 max-w-4xl mx-auto">
-                              <div className="relative group w-2/3 sm:w-full max-w-sm">
+                              <div className="relative group w-full max-w-sm">
                    {/* 화려한 테두리 효과 */}
                    <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
                    <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse" style={{animationDelay: '0.5s'}}></div>
@@ -858,8 +858,8 @@ function HomeContent() {
                   {/* 메인 카드 - 기존 갤러리 카드와 동일하며, 모바일에서 2/3 폭으로 축소 */}
                    <div className="relative group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 new-release-card w-full" style={{ backgroundColor: '#D1E2EA' }} onMouseEnter={blockTranslationFeedback} onClick={(e) => e.stopPropagation()}>
                      <div className="relative pt-3">
-                      {/* 모바일에서는 220x220, sm 이상에서 310x310 + 내부 패딩 */}
-                      <div className="mx-auto w-[220px] h-[220px] sm:w-[310px] sm:h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-2">
+                      {/* 모든 뷰포트: 정확히 330x330 + 내부 패딩 */}
+                      <div className="mx-auto w-[310px] h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-2">
                          <div className="relative w-full h-full overflow-hidden rounded-lg">
                            {latestApp.screenshotUrls && latestApp.screenshotUrls.length > 0 ? (
                              <Image

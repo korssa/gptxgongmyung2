@@ -232,7 +232,7 @@ const gap = parseFloat(gapStr);
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] flex-shrink-0 ${
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] flex-none ${
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
