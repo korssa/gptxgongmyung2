@@ -289,8 +289,8 @@ for (let i = 0; i < 10; i++) {
         name: title,
         developer: author,
         description: content,
-      iconUrl: iconUrl,
-screenshotUrls: screenshotUrls.length > 0 ? screenshotUrls : (iconUrl ? [iconUrl] : []),
+ iconUrl: imageUrl,
+screenshotUrls: screenshotUrls.length > 0 ? screenshotUrls : (imageUrl ? [imageUrl] : []),
 
         rating: 4.5,
         downloads: "1K+",
