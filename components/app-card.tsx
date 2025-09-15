@@ -77,7 +77,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
     return (
       <>
         <Card
-          className="w-[340px] aspect-[3/4] flex-shrink-0 p-2 bg-white shadow group overflow-hidden"
+          className="w-[340px] h-[226px] flex-shrink-0 p-2 bg-white shadow group overflow-hidden"
           onMouseEnter={blockTranslationFeedback}
         >
           <div className="flex flex-col h-full">
@@ -283,7 +283,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[340px] aspect-[4/5] shrink-0"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[340px] h-[425px] shrink-0"
         style={{ backgroundColor: '#D1E2EA' }}
         onMouseEnter={blockTranslationFeedback}
       >
