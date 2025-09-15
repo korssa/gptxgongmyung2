@@ -103,7 +103,7 @@ export function AppGallery({ apps: initialApps, viewMode, onDeleteApp, onEditApp
     return (
       <div className="flex flex-row gap-4 overflow-x-auto py-4 px-2">
         {appsToRender.map((app, index) => (
-          <div key={app.id} className="relative shrink-0">
+          <div key={app.id} className="relative">
             {showNumbering && (
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 event-number text-black font-bold text-2xl w-16 h-16 rounded-full flex items-center justify-center">
                 {index + 1}

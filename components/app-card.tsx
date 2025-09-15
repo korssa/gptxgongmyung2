@@ -77,7 +77,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
     return (
       <>
         <Card
-          className="w-[260px] h-[220px] sm:w-[300px] sm:h-[226px] lg:w-[340px] lg:h-[226px] flex-shrink-0 p-2 bg-white shadow group overflow-hidden"
+          className="w-[170px] aspect-[3/4] flex-shrink-0 p-2 bg-white shadow group overflow-hidden"
           onMouseEnter={blockTranslationFeedback}
         >
           <div className="flex flex-col h-full">
@@ -283,13 +283,13 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[300px] h-[400px] sm:w-[320px] sm:h-[415px] lg:w-[340px] lg:h-[425px] shrink-0"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[340px] aspect-[4/5]"
         style={{ backgroundColor: '#D1E2EA' }}
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
           {/* Screenshot/App Preview */}
-          <div className="w-[260px] h-[260px] sm:w-[280px] sm:h-[280px] lg:w-[300px] lg:h-[300px] max-w-full mx-auto overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
+          <div className="aspect-square overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
             {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
               <Image
                 src={app.screenshotUrls[0]}
