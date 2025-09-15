@@ -60,8 +60,8 @@ export function GalleryManager({
     const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
     let amount = 0;
     if (isMobile) {
-      const firstItem = el.firstElementChild as HTMLElement | null;
-      const itemWidth = firstItem?.offsetWidth ?? 170; // fallback to our card width
+  const firstItem = el.firstElementChild as HTMLElement | null;
+  const itemWidth = firstItem?.offsetWidth ?? 340; // fallback to our widened card width
      const styles = getComputedStyle(el) as CSSStyleDeclaration;
 const gapStr = (styles.columnGap || styles.gap || "0").toString();
 const gap = parseFloat(gapStr);
@@ -232,7 +232,7 @@ const gap = parseFloat(gapStr);
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[170px] flex-shrink-0 ${
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[340px] shrink-0 ${
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
