@@ -9,6 +9,7 @@ export interface AppItem {
   description: string;
   iconUrl: string;
   screenshotUrls: string[];
+   imageUrl?: string; 
   store: AppStore;
   status: AppStatus;
   rating: number;
