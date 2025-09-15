@@ -283,14 +283,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-full max-w-sm"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[256px] flex-shrink-0"
         style={{ backgroundColor: '#D1E2EA' }}
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
           {/* Screenshot/App Preview (match New Release: fixed 310x310 box) */}
-          <div className="relative pt-2">
-            <div className="mx-auto w-[310px] h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-1">
+          <div className="relative pt-1">
+            <div className="mx-auto w-[206px] h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
               <div className="relative w-full h-full overflow-hidden rounded-lg">
                 {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
                   <Image
@@ -331,15 +331,15 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           )}
         </div>
 
-        <CardContent className="p-2" style={{ backgroundColor: '#D1E2EA' }}>
+        <CardContent className="p-[6px]" style={{ backgroundColor: '#D1E2EA' }}>
           {/* App Icon and Basic Info */}
-          <div className="flex items-start space-x-4 mb-3">
+          <div className="flex items-start space-x-4 mb-2">
             <Image
               src={app.iconUrl}
               alt={app.name}
-              width={80}
-              height={80}
-              className="w-20 h-20 rounded-xl object-cover object-center flex-shrink-0"
+              width={54}
+              height={54}
+              className="w-[54px] h-[54px] rounded-xl object-cover object-center flex-shrink-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
@@ -352,7 +352,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           </div>
 
           {/* Rating and Stats */}
-          <div className="flex items-center justify-between text-base text-muted-foreground mb-3">
+          <div className="flex items-center justify-between text-base text-muted-foreground mb-2">
             <div className="flex items-center space-x-3">
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -365,7 +365,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
 
           {/* Tags */}
           {app.tags && app.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 mb-2">
               {app.tags.slice(0, 2).map((tag, index) => (
                 <Badge key={index} variant="secondary" className="text-base px-3 py-1">
                   {tag}
@@ -381,14 +381,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
         </CardContent>
 
         {/* Download Section - align with New Release */}
-        <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-3 py-2">
+        <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
           <div className="flex flex-col items-start space-y-0">
             {/* 하단 2줄 - 다운로드 버튼 */}
             <div className="w-full">
               {app.status === "published" ? (
                 <Button
                   size="sm"
-                  className="h-9 px-5 text-base bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] justify-start"
+                  className="h-6 px-3 text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[120px] justify-start"
                   onClick={handleStoreView}
                 >
                   <Download className="h-4 w-4" />
@@ -397,7 +397,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               ) : (
                 <Button
                   size="sm"
-                  className="h-9 px-5 text-base bg-gray-500 text-white flex items-center gap-1 min-w-[140px] justify-start"
+                  className="h-6 px-3 text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[120px] justify-start"
                   disabled
                 >
                   Coming soon
@@ -406,13 +406,13 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
             </div>
 
             {/* 하단 1줄 - 스토어 배지 */}
-            <div className="h-9">
+            <div className="h-6">
               <Image
                 src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
                 alt="스토어 배지"
-                width={140}
-                height={28}
-                className="h-9 object-contain"
+                width={105}
+                height={24}
+                className="h-6 object-contain"
               />
             </div>
           </div>
