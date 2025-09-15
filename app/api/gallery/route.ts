@@ -237,19 +237,38 @@ export async function POST(request: NextRequest) {
 
       // 고유 ID 생성
       const id = `${type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+const file = formData.get('file') as File | null;
 
-      let imageUrl: string | undefined;
+if (!title || !content || !author) {
+  return NextResponse.json({ error: '필수 필드가 누락되었습니다' }, { status: 400 });
+}
 
-      // 이미지 업로드 - type에 따라 경로 결정
-      if (file) {
-        const filename = `${id}.${file.name.split('.').pop()}`;
-        // type이 gallery 또는 normal이면 gallery-gallery 폴더에, 아니면 gallery-{type} 폴더에 저장
-        const imageFolder = (type === 'gallery' || type === 'normal') ? 'gallery-gallery' : `gallery-${type}`;
-        const blob = await put(`${imageFolder}/${filename}`, file, {
-          access: 'public',
-        });
-        imageUrl = blob.url;
-      }
+// ✅ 여기에 삽입
+let imageUrl: string | undefined;
+const screenshotUrls: string[] = [];
+
+if (file) {
+  const filename = `${id}.${file.name.split('.').pop()}`;
+  const imageFolder = (type === 'gallery' || type === 'normal') ? 'gallery-gallery' : `gallery-${type}`;
+  const blob = await put(`${imageFolder}/${filename}`, file, {
+    access: 'public',
+  });
+  imageUrl = blob.url;
+}
+
+// ✅ 스크린샷 반복 업로드
+for (let i = 0; i < 10; i++) {
+  const ss = formData.get(`screenshot_${i}`);
+  if (ss instanceof File && ss.size > 0) {
+    const ext = ss.name.split('.').pop();
+    const filename = `${id}-screenshot-${i}.${ext}`;
+    const imageFolder = (type === 'gallery' || type === 'normal') ? 'gallery-gallery' : `gallery-${type}`;
+    const blob = await put(`${imageFolder}/${filename}`, ss, {
+      access: 'public',
+    });
+    screenshotUrls.push(blob.url);
+  }
+}
 
       // 갤러리 아이템 생성
       galleryItem = {
@@ -270,8 +289,9 @@ export async function POST(request: NextRequest) {
         name: title,
         developer: author,
         description: content,
-        iconUrl: imageUrl,
-        screenshotUrls: imageUrl ? [imageUrl] : [],
+      iconUrl: iconUrl,
+screenshotUrls: screenshotUrls.length > 0 ? screenshotUrls : (iconUrl ? [iconUrl] : []),
+
         rating: 4.5,
         downloads: "1K+",
         version: "1.0.0",
