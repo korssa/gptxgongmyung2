@@ -289,7 +289,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
       >
         <div className="relative">
           {/* Screenshot/App Preview */}
-          <div className="aspect-square overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
+          <div className="w-[300px] h-[300px] max-w-full mx-auto overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
             {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
               <Image
                 src={app.screenshotUrls[0]}

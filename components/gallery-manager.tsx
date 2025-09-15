@@ -245,7 +245,7 @@ const gap = parseFloat(gapStr);
               <div className="relative">
                 {/* Screenshot/App Preview */}
                 <div className="w-full mx-auto">
-                  <div className="h-[170px] overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
+                  <div className="w-[170px] h-[170px] max-w-full mx-auto overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 relative">
                     {/* Numbering overlay for events */}
                     {type === "events" && (
                       <div className="absolute top-2 left-2 z-10">
