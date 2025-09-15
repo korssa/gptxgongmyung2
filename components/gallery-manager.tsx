@@ -330,14 +330,15 @@ const gap = parseFloat(gapStr);
                         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRDOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
                     }}
                   />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-xl sm:text-xl mb-1 truncate notranslate text-amber-400" translate="no">
-                      {item.name}
-                    </h3>
-                    <p className="text-base sm:text-base text-muted-foreground truncate notranslate" translate="no">
-                      {item.developer}
-                    </p>
-                  </div>
+              <div className="flex-1 min-w-0">
+  <h3 className="font-bold text-base sm:text-sm mb-1 truncate notranslate text-amber-400" translate="no">
+    {item.name}
+  </h3>
+  <p className="text-sm sm:text-xs text-muted-foreground truncate notranslate" translate="no">
+    {item.developer}
+  </p>
+</div>
+
                 </div>
 
                 {/* Rating and Stats */}
