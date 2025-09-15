@@ -154,14 +154,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           onMouseEnter={blockTranslationFeedback}
         >
           {/* App Icon */}
-          <div className="w-24 h-24 flex-shrink-0 p-3">
+         <div className="w-28 h-28 flex-shrink-0 p-2">
             <Image
               src={app.iconUrl}
-              alt={app.name}
-              width={96}
-              height={96}
-              unoptimized={isBlobUrl(app.iconUrl)}
-              className="w-full h-full object-cover object-center rounded-xl"
+  alt={app.name}
+  width={112} // or 100~110 정도
+  height={112}
+  unoptimized={isBlobUrl(app.iconUrl)}
+  className="w-full h-full object-cover object-center rounded-2xl"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
