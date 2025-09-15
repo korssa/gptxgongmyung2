@@ -331,12 +331,12 @@ const gap = parseFloat(gapStr);
                     }}
                   />
               <div className="flex-1 min-w-0">
-  <h3 className="font-bold text-base sm:text-sm mb-1 truncate notranslate text-amber-400" translate="no">
-    {item.name}
-  </h3>
-  <p className="text-sm sm:text-xs text-muted-foreground truncate notranslate" translate="no">
-    {item.developer}
-  </p>
+<h3 className="font-bold text-xl sm:text-sm mb-1 truncate notranslate text-sky-500" translate="no">
+  {item.name}
+</h3>
+<p className="text-base sm:text-xs text-muted-foreground truncate notranslate" translate="no">
+  {item.developer}
+</p>
 </div>
 
                 </div>
@@ -357,7 +357,7 @@ const gap = parseFloat(gapStr);
                 {item.tags && item.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {item.tags.slice(0, 2).map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm sm:text-base px-2.5 sm:px-3 py-0.5 sm:py-1">
+                      <Badge key={index} variant="secondary" className="text-sm sm:text-sm px-2 sm:px-2.5 py-0.5 sm:py-0.5">
                         {tag}
                       </Badge>
                     ))}
