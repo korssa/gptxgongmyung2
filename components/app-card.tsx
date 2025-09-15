@@ -331,7 +331,8 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           )}
         </div>
 
-        <CardContent className="p-[6px]" style={{ backgroundColor: '#D1E2EA' }}>
+  <div className="mx-auto w-[310px] sm:w-[206px]">
+  <CardContent className="p-[6px]" style={{ backgroundColor: '#D1E2EA' }}>
           {/* App Icon and Basic Info */}
           <div className="flex items-start space-x-4 mb-2">
             <Image
@@ -378,10 +379,10 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               )}
             </div>
           )}
-        </CardContent>
+  </CardContent>
 
         {/* Download Section - align with New Release */}
-        <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
+  <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
           <div className="flex flex-col items-start sm:items-center space-y-0 sm:space-y-1">
             {/* 하단 2줄 - 다운로드 버튼 */}
             <div className="w-full sm:w-auto">
@@ -416,6 +417,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               />
             </div>
           </div>
+        </div>
         </div>
       </Card>
 

@@ -313,6 +313,7 @@ const gap = parseFloat(gapStr);
                 )}
               </div>
 
+              <div className="mx-auto w-[310px] sm:w-[206px]">
               <CardContent className="p-[6px]" style={{ backgroundColor: "#D1E2EA" }}>
                 {/* App Icon and Basic Info */}
                 <div className="flex items-start space-x-4 mb-2">
@@ -422,6 +423,7 @@ const gap = parseFloat(gapStr);
                   </div>
                 </div>
               </CardFooter>
+              </div>
             </Card>
           ))
         )}
