@@ -283,14 +283,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] flex-none"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none"
         style={{ backgroundColor: '#D1E2EA' }}
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
           {/* Screenshot/App Preview (match New Release: fixed 310x310 box) */}
           <div className="relative pt-1">
-            <div className="mx-auto w-[180px] h-[180px] sm:w-[206px] sm:h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
+            <div className="mx-auto w-[310px] h-[310px] sm:w-[206px] sm:h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
               <div className="relative w-full h-full overflow-hidden rounded-lg">
                 {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
                   <Image
@@ -339,20 +339,20 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               alt={app.name}
               width={54}
               height={54}
-              className="w-[48px] h-[48px] sm:w-[54px] sm:h-[54px] rounded-xl object-cover object-center flex-shrink-0"
+              className="w-[80px] h-[80px] sm:w-[54px] sm:h-[54px] rounded-xl object-cover object-center flex-shrink-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
               }}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg sm:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
-              <p className="text-sm sm:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
+              <h3 className="font-bold text-xl sm:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
+              <p className="text-base sm:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
             </div>
           </div>
 
           {/* Rating and Stats */}
-          <div className="flex items-center justify-between text-sm sm:text-base text-muted-foreground mb-2">
+          <div className="flex items-center justify-between text-base text-muted-foreground mb-2">
             <div className="flex items-center space-x-3">
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -367,12 +367,12 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           {app.tags && app.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-2">
               {app.tags.slice(0, 2).map((tag, index) => (
-                <Badge key={index} variant="secondary" className="text-sm sm:text-base px-2.5 sm:px-3 py-0.5 sm:py-1">
+                <Badge key={index} variant="secondary" className="text-base px-3 py-1">
                   {tag}
                 </Badge>
               ))}
               {app.tags.length > 2 && (
-                <span className="text-sm sm:text-base text-muted-foreground">
+                <span className="text-base text-muted-foreground">
                   +{app.tags.length - 2}
                 </span>
               )}
@@ -388,7 +388,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               {app.status === "published" ? (
                 <Button
                   size="sm"
-                  className="h-6 px-3 text-xs sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[110px] sm:min-w-[120px] justify-start"
+                  className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[120px] justify-start"
                   onClick={handleStoreView}
                 >
                   <Download className="h-4 w-4" />
@@ -397,7 +397,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               ) : (
                 <Button
                   size="sm"
-                  className="h-6 px-3 text-xs sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[110px] sm:min-w-[120px] justify-start"
+                  className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] sm:min-w-[120px] justify-start"
                   disabled
                 >
                   Coming soon
@@ -406,13 +406,13 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
             </div>
 
             {/* 하단 1줄 - 스토어 배지 */}
-            <div className="h-6">
+            <div className="h-10 sm:h-6">
               <Image
                 src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
                 alt="스토어 배지"
-                width={105}
-                height={24}
-                className="h-6 object-contain"
+                width={140}
+                height={32}
+                className="h-10 sm:h-6 object-contain"
               />
             </div>
           </div>
