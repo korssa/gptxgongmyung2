@@ -232,7 +232,7 @@ const gap = parseFloat(gapStr);
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[256px] flex-shrink-0 ${
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] flex-shrink-0 ${
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
@@ -245,7 +245,7 @@ const gap = parseFloat(gapStr);
               <div className="relative">
                 {/* Screenshot/App Preview - match New Release sizing (310x310 box) */}
                 <div className="relative pt-1">
-                  <div className="mx-auto w-[206px] h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
+                  <div className="mx-auto w-[180px] h-[180px] sm:w-[206px] sm:h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
                     <div className="relative w-full h-full overflow-hidden rounded-lg">
                       {/* Numbering overlay for events */}
                       {type === "events" && (
@@ -322,7 +322,7 @@ const gap = parseFloat(gapStr);
                     width={54}
                     height={54}
                     unoptimized
-                    className="w-[54px] h-[54px] rounded-xl object-cover object-center flex-shrink-0"
+                    className="w-[48px] h-[48px] sm:w-[54px] sm:h-[54px] rounded-xl object-cover object-center flex-shrink-0"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src =
@@ -330,17 +330,17 @@ const gap = parseFloat(gapStr);
                     }}
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-xl mb-1 truncate notranslate text-amber-400" translate="no">
+                    <h3 className="font-bold text-lg sm:text-xl mb-1 truncate notranslate text-amber-400" translate="no">
                       {item.name}
                     </h3>
-                    <p className="text-base text-muted-foreground truncate notranslate" translate="no">
+                    <p className="text-sm sm:text-base text-muted-foreground truncate notranslate" translate="no">
                       {item.developer}
                     </p>
                   </div>
                 </div>
 
                 {/* Rating and Stats */}
-                <div className="flex items-center justify-between text-base text-muted-foreground mb-2">
+                <div className="flex items-center justify-between text-sm sm:text-base text-muted-foreground mb-2">
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -355,12 +355,12 @@ const gap = parseFloat(gapStr);
                 {item.tags && item.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {item.tags.slice(0, 2).map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-base px-3 py-1">
+                      <Badge key={index} variant="secondary" className="text-sm sm:text-base px-2.5 sm:px-3 py-0.5 sm:py-1">
                         {tag}
                       </Badge>
                     ))}
                     {item.tags.length > 2 && (
-                      <span className="text-base text-muted-foreground">+{item.tags.length - 2}</span>
+                      <span className="text-sm sm:text-base text-muted-foreground">+{item.tags.length - 2}</span>
                     )}
                   </div>
                 )}
@@ -375,7 +375,7 @@ const gap = parseFloat(gapStr);
                       type === "events" ? (
                         <Button
                           size="sm"
-                          className="h-6 px-3 text-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[100px] justify-start"
+                          className="h-6 px-3 text-xs sm:text-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[90px] sm:min-w-[100px] justify-start"
                           onClick={() => {
                             if (item.storeUrl) {
                               window.open(item.storeUrl, "_blank");
@@ -388,7 +388,7 @@ const gap = parseFloat(gapStr);
                       ) : (
                         <Button
                           size="sm"
-                          className="h-6 px-3 text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[100px] justify-start"
+                          className="h-6 px-3 text-xs sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[90px] sm:min-w-[100px] justify-start"
                           onClick={() => {
                             if (item.storeUrl) {
                               window.open(item.storeUrl, "_blank");
@@ -402,7 +402,7 @@ const gap = parseFloat(gapStr);
                     ) : (
                       <Button
                         size="sm"
-                        className="h-6 px-3 text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[100px] justify-start"
+                        className="h-6 px-3 text-xs sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[90px] sm:min-w-[100px] justify-start"
                         disabled
                       >
                         Coming soon
