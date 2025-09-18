@@ -232,14 +232,23 @@ export function GoogleTranslateWidget() {
       // 대표 언어(현재 선택값)를 맨 위에, 나머지는 알파벳순으로
       const selectedCode = normalizeCode(selectedValue);
       const selectedOption = options.find((opt) => opt.value === selectedCode);
-      const otherOptions = options.filter((opt) => opt.value !== selectedCode);
-      otherOptions.sort((a, b) => a.text.localeCompare(b.text));
+      // 나머지 옵션을: '-'로 시작하는 것 먼저, 그 다음 a~z 오름차순
+      const otherOptions = options
+        .filter((opt) => opt.value !== selectedCode)
+        .sort((a, b) => {
+          const aIsDash = a.text.trim().startsWith("-");
+          const bIsDash = b.text.trim().startsWith("-");
+          if (aIsDash && !bIsDash) return -1;
+          if (!aIsDash && bIsDash) return 1;
+          return a.text.localeCompare(b.text);
+        });
       combo.innerHTML = "";
       if (selectedOption) {
         combo.appendChild(selectedOption);
         selectedOption.selected = true;
         combo.value = selectedOption.value;
       }
+      // a~z 오름차순으로 추가
       otherOptions.forEach((opt) => combo.appendChild(opt));
     }
     function hideFeedbackElements() {
