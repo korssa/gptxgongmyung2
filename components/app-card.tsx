@@ -74,24 +74,20 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   };
   // Mini view: compact horizontal card for scrollers
   if (viewMode === "mini") {
-      const topImage =
-    (isFeatured || isEvent) && app.screenshotUrls?.[0]
-      ? app.screenshotUrls[0]
-      : app.iconUrl;
     return (
       <>
-         <Card className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 shadow group overflow-hidden"
-            style={{ backgroundColor: '#D1E2EA' }}
+        <Card
+          className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 shadow group overflow-hidden bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
           onMouseEnter={blockTranslationFeedback}
         >
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center">
               <Image
-                src={topImage}
+                src={app.iconUrl}
                 alt={app.name}
                 width={72}
                 height={72}
-                unoptimized={isBlobUrl(topImage)}
+                unoptimized={isBlobUrl(app.iconUrl)}
                 className="rounded-md"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -101,21 +97,31 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
             </div>
             <h3 className="text-sm sm:text-base font-bold text-center mt-2 truncate notranslate app-name-fixed" translate="no">{app.name}</h3>
             <p className="text-xs sm:text-sm text-muted-foreground text-center truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
-            <div className="mt-auto">
+            <div className="mt-auto flex flex-col items-center gap-1">
               {app.status === "published" ? (
                 <Button
                   size="sm"
-                  className="w-full h-6 mt-2 text-[11px] sm:text-xs bg-green-700 hover:bg-green-800 text-white flex items-center justify-center gap-1"
+                  className="w-[90%] h-7 mt-2 text-[12px] sm:text-xs bg-green-700 hover:bg-green-800 text-white flex items-center justify-center gap-1 mx-auto"
                   onClick={handleStoreView}
                 >
                   <Download className="h-3 w-3" />
                   {getButtonText()}
                 </Button>
               ) : (
-                <Button size="sm" className="w-full h-6 mt-2 text-[11px] sm:text-xs bg-gray-500 text-white" disabled>
+                <Button size="sm" className="w-[90%] h-7 mt-2 text-[12px] sm:text-xs bg-gray-500 text-white mx-auto" disabled>
                   Coming soon
                 </Button>
               )}
+              {/* 스토어 뱃지 중앙 정렬 */}
+              <div className="flex justify-center w-full mt-1">
+                <Image
+                  src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
+                  alt="스토어 배지"
+                  width={100}
+                  height={28}
+                  className="h-7 object-contain mx-auto"
+                />
+              </div>
             </div>
           </div>
         </Card>
@@ -149,18 +155,18 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
     return (
       <>
         <Card
-           className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 shadow group overflow-hidden bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
+          className="flex flex-row overflow-hidden hover:shadow-lg transition-shadow bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
           onMouseEnter={blockTranslationFeedback}
         >
           {/* App Icon */}
-         <div className="w-28 h-28 flex-shrink-0 p-2">
+          <div className="w-24 h-24 flex-shrink-0 p-3">
             <Image
               src={app.iconUrl}
-  alt={app.name}
-  width={112} // or 100~110 정도
-  height={112}
-  unoptimized={isBlobUrl(app.iconUrl)}
-  className="w-full h-full object-cover object-center rounded-2xl"
+              alt={app.name}
+              width={96}
+              height={96}
+              unoptimized={isBlobUrl(app.iconUrl)}
+              className="w-full h-full object-cover object-center rounded-xl"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
@@ -168,7 +174,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
             />
           </div>
 
-          <CardContent className="flex-1 px-2 py-0" style={{ backgroundColor: '#D1E2EA' }}>
+          <CardContent className="flex-1 px-2 py-0 bg-black sm:bg-[#D1E2EA] text-white sm:text-black">
             <div className="flex justify-between items-start h-full">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -286,13 +292,13 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-          className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] md:w-[280px] lg:w-[320px] flex-none bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
           {/* Screenshot/App Preview (match New Release: fixed 310x310 box) */}
           <div className="relative pt-1">
-            <div className="mx-auto w-[310px] h-[310px] sm:w-[206px] sm:h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
+            <div className="mx-auto w-[206px] h-[206px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] lg:w-[310px] lg:h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
               <div className="relative w-full h-full overflow-hidden rounded-lg">
                 {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
                   <Image
@@ -333,8 +339,8 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           )}
         </div>
 
-  <div className="w-full">
-  <CardContent className="p-[6px]" style={{ backgroundColor: '#D1E2EA' }}>
+  <div className="mx-auto w-[206px] sm:w-[240px] md:w-[280px] lg:w-[310px]">
+  <CardContent className="p-[6px] bg-black sm:bg-[#D1E2EA] text-white sm:text-black">
           {/* App Icon and Basic Info */}
           <div className="flex items-start space-x-4 mb-2">
             <Image
@@ -342,16 +348,16 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               alt={app.name}
               width={54}
               height={54}
-              className="w-[80px] h-[80px] sm:w-[54px] sm:h-[54px] rounded-xl object-cover object-center flex-shrink-0"
+              className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] rounded-xl object-cover object-center flex-shrink-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
               }}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg sm:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
-           <p className="text-sm sm:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
-      </div>
+              <h3 className="font-bold text-lg sm:text-xl md:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
+              <p className="text-sm sm:text-base md:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
+            </div>
           </div>
 
           {/* Rating and Stats */}
@@ -385,40 +391,39 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
 
         {/* Download Section - align with New Release */}
   <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
-          <div className="flex flex-col items-center space-y-1">
+          <div className="flex flex-col items-start sm:items-center space-y-0 sm:space-y-1">
             {/* 하단 2줄 - 다운로드 버튼 */}
-          <div className="w-full sm:w-auto flex justify-center">
-  {app.status === "published" ? (
-    <Button
-      size="sm"
-      className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[120px] mx-auto"
-      onClick={handleStoreView}
-    >
-      <Download className="h-4 w-4" />
-      {getButtonText()}
-    </Button>
-  ) : (
-    <Button
-      size="sm"
-      className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] sm:min-w-[120px] mx-auto"
-      disabled
-    >
-      Coming soon
-    </Button>
-  )}
-</div>
+            <div className="w-full sm:w-auto">
+              {app.status === "published" ? (
+                <Button
+                  size="sm"
+                  className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[120px] justify-start"
+                  onClick={handleStoreView}
+                >
+                  <Download className="h-4 w-4" />
+                  {getButtonText()}
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] sm:min-w-[120px] justify-start"
+                  disabled
+                >
+                  Coming soon
+                </Button>
+              )}
+            </div>
 
-{/* 스토어 뱃지 */}
-<div className="h-10 sm:h-6 flex justify-center">
-  <Image
-    src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
-    alt="스토어 배지"
-    width={140}
-    height={32}
-    className="h-10 sm:h-6 object-contain mx-auto"
-  />
-</div>
-
+            {/* 하단 1줄 - 스토어 배지 */}
+            <div className="h-10 sm:h-6">
+              <Image
+                src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
+                alt="스토어 배지"
+                width={140}
+                height={32}
+                className="h-10 sm:h-6 object-contain"
+              />
+            </div>
           </div>
         </div>
         </div>
