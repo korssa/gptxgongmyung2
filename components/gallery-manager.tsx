@@ -271,7 +271,7 @@ export function GalleryManager({
                       )}
 
                       {/* Status Badge (overlay on screenshot) */}
-                      <div className="absolute bottom-1 left-1/2 sm:left-1 transform -translate-x-1/2 sm:translate-x-0">
+                      <div className="absolute bottom-1 left-1">
                         <Badge
                           className={`text-white text-[10px] px-1 py-0.5 ${
                             item.status === "published"
@@ -369,7 +369,7 @@ export function GalleryManager({
 
               {/* Download Section */}
               <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
-                <div className="flex flex-col items-center sm:items-center space-y-1 w-full">
+                <div className="flex flex-col items-start sm:items-start space-y-1 w-full">
                   {/* Download Button */}
                   <div className="w-full sm:w-auto">
                     {item.status === "published" ? (
@@ -412,7 +412,7 @@ export function GalleryManager({
                   </div>
 
                   {/* Store Badge */}
-                  <div className="h-10 sm:h-6 flex justify-center sm:justify-center">
+                  <div className="h-10 sm:h-6 flex justify-start sm:justify-start">
                     <Image
                       src={item.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
                       alt="스토어 배지"
