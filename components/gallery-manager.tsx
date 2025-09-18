@@ -271,7 +271,7 @@ export function GalleryManager({
                       )}
 
                       {/* Status Badge (overlay on screenshot) */}
-                      <div className="absolute bottom-1 left-1 sm:left-1 sm:bottom-1 w-full sm:w-auto flex justify-center sm:justify-start">
+                      <div className="absolute bottom-1 left-1/2 sm:left-1 transform -translate-x-1/2 sm:translate-x-0">
                         <Badge
                           className={`text-white text-[10px] px-1 py-0.5 ${
                             item.status === "published"
