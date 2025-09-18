@@ -275,7 +275,7 @@ export function GalleryManager({
                         <Badge
                           className={`text-white text-[10px] px-1 py-0.5 ${
                             item.status === "published"
-                              ? "bg-green-500"
+                              ? "bg-blue-500"
                               : item.status === "in-review"
                               ? "bg-orange-500"
                               : "bg-gray-500"
@@ -331,7 +331,7 @@ export function GalleryManager({
                     }}
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-xs sm:text-xl md:text-xl mb-1 truncate notranslate text-sky-400" translate="no">
+                    <h3 className="font-bold text-sm sm:text-xl md:text-xl mb-1 truncate notranslate text-sky-400" translate="no">
                       {item.name}
                     </h3>
                     <p className="text-sm sm:text-base md:text-base text-muted-foreground truncate notranslate" translate="no">
@@ -389,7 +389,7 @@ export function GalleryManager({
                       ) : (
                         <Button
                           size="sm"
-                          className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[100px] justify-start"
+                          className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[100px] justify-start"
                           onClick={() => {
                             if (item.storeUrl) {
                               window.open(item.storeUrl, "_blank");
