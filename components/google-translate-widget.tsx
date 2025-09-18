@@ -232,7 +232,7 @@ export function GoogleTranslateWidget() {
       // 대표 언어(현재 선택값)를 맨 위에, 나머지는 알파벳순으로
       const selectedCode = normalizeCode(selectedValue);
       const selectedOption = options.find((opt) => opt.value === selectedCode);
-      // 나머지 옵션을: '-'로 시작하는 것 먼저, 그 다음 a~z 오름차순
+      // 나머지 옵션을: '-'로 시작하는 것 먼저, 그 다음 z~a 내림차순
       const otherOptions = options
         .filter((opt) => opt.value !== selectedCode)
         .sort((a, b) => {
@@ -240,7 +240,8 @@ export function GoogleTranslateWidget() {
           const bIsDash = b.text.trim().startsWith("-");
           if (aIsDash && !bIsDash) return -1;
           if (!aIsDash && bIsDash) return 1;
-          return a.text.localeCompare(b.text);
+          // z~a 내림차순
+          return b.text.localeCompare(a.text);
         });
       combo.innerHTML = "";
       if (selectedOption) {
