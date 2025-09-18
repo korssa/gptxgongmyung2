@@ -49,10 +49,12 @@ export function Header({
 
   {/* 뷰 모드 토글 자리: border만 남기고 내부 비움, 헤더 배경색과 동일한 border */}
   {/* Increased width and border thickness so the select bar moves slightly to the right */}
-  <div aria-hidden="true" className="flex items-center space-x-1 rounded-md p-1" style={{ width: 160, height: 36, border: '2px solid #5F98F5' }} />
+  <div aria-hidden="true" className="flex items-center space-x-1 rounded-md p-1" style={{ width: 120, height: 36, border: '2px solid #5F98F5' }} />
 
-  {/* 구글 번역 위젯 */}
-  <GoogleTranslateWidget />
+  {/* 구글 번역 위젯 - 모바일에서는 중앙 정렬, md 이상에서는 좌측 정렬 유지 */}
+  <div className="w-full md:w-auto md:mr-2 flex justify-center md:justify-start">
+    <GoogleTranslateWidget />
+  </div>
 
 
         {/* 검색바 */}
