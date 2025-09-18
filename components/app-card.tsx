@@ -81,7 +81,8 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
     return (
       <>
         <Card
-          className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 bg-white shadow group overflow-hidden"
+         <Card className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 shadow group overflow-hidden"
+            style={{ backgroundColor: '#D1E2EA' }}
           onMouseEnter={blockTranslationFeedback}
         >
           <div className="flex flex-col h-full">
