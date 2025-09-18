@@ -1524,7 +1524,6 @@ h4.notranslate[translate="no"] * {
   }
   .featured-glow-card::before,
   .allapps-glow-card::before {
-    opacity: 0.2; /* 빛 배경 투명도 낮춰서 내용이 더 잘 보이게 */
   }
 }
 
