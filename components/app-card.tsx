@@ -29,7 +29,7 @@ interface AppCardProps {
 const getStatusColor = (status: string) => {
   switch (status) {
     case "published":
-      return "bg-green-500";
+      return "bg-blue-500";
     case "in-review":
       return "bg-yellow-500";
     case "development":
