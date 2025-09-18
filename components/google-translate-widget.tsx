@@ -251,11 +251,22 @@ export function GoogleTranslateWidget() {
       combo.appendChild(guideOption);
       guideOption.selected = true;
       combo.value = "";
-      if (selectedOption) {
+      // 영어(en)가 있으면 항상 두 번째로 추가하고, combo.value가 빈값이면 en을 선택
+      const enOption = options.find((opt) => opt.value === "en");
+      if (enOption) {
+        combo.appendChild(enOption);
+        if (!selectedOption && combo.value === "") {
+          enOption.selected = true;
+          combo.value = "en";
+        }
+      }
+      if (selectedOption && selectedOption.value !== "en") {
         combo.appendChild(selectedOption);
         selectedOption.selected = false;
       }
-      otherOptions.forEach((opt) => combo.appendChild(opt));
+      otherOptions.forEach((opt) => {
+        if (opt.value !== "en") combo.appendChild(opt);
+      });
     }
     function hideFeedbackElements() {
       const feedbackSelectors = [
