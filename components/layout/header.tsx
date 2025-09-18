@@ -48,7 +48,8 @@ export function Header({
 
 
   {/* 뷰 모드 토글 자리: border만 남기고 내부 비움, 헤더 배경색과 동일한 border */}
-  <div className="flex items-center space-x-1 rounded-md p-1" style={{ width: 64, height: 36, border: '1px solid #5F98F5' }} />
+  {/* Increased width and border thickness so the select bar moves slightly to the right */}
+  <div aria-hidden="true" className="flex items-center space-x-1 rounded-md p-1" style={{ width: 120, height: 36, border: '2px solid #5F98F5' }} />
 
   {/* 구글 번역 위젯 */}
   <GoogleTranslateWidget />
