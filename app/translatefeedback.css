@@ -89,10 +89,9 @@ body {
   display: none !important;
 }
 
-/* 8. .skiptranslate 클래스 완전 숨김 & 상단 공간 복원 */
-.skiptranslate {
-  display: none !important;
-}
+/* 8. 중요: .skiptranslate는 Google Translate가 전체 문서를 감싸는 래퍼일 수 있음
+   이를 display:none으로 숨기면 페이지 전체가 사라져(검은 배경만 보임) 태블릿 등에서 블랭크 화면이 발생할 수 있음.
+   따라서 .skiptranslate 자체는 숨기지 않습니다. */
 
 body {
   top: 0 !important;
