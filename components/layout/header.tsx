@@ -44,8 +44,6 @@ export function Header({
           </span>
         </div>
 
-        {/* 뷰 모드 토글 자리: 빈 공간 유지 */}
-        <div className="flex items-center space-x-1 border border-white/30 rounded-md p-1" style={{ width: 64, height: 36 }} />
 
         {/* 구글 번역 위젯 */}
         <GoogleTranslateWidget />
