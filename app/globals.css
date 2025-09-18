@@ -753,6 +753,10 @@ body {
   display: none !important;
 }
 
+/* 구글 번역 위젯 Powered by → By로 치환 */
+.goog-logo-link { font-size: 0 !important; }
+.goog-logo-link:after { content: "By"; font-size: 11px; color: #fff; letter-spacing: 0.5px; }
+
 /* 가로 일자형 레이아웃을 위한 요소 정렬 */
 .goog-te-gadget .goog-logo-link {
   display: inline-block !important;
