@@ -57,15 +57,16 @@ export function GalleryManager({
     if (!el) return;
 
     // Determine distance to travel
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+    const width = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const isMobile = width < 640;
+    const isTablet = width >= 640 && width < 1024;
     let amount = 0;
-    if (isMobile) {
-  const firstItem = el.firstElementChild as HTMLElement | null;
-  const itemWidth = firstItem?.offsetWidth ?? 170; // fallback to original mini card width
-     const styles = getComputedStyle(el) as CSSStyleDeclaration;
-const gapStr = (styles.columnGap || styles.gap || "0").toString();
-const gap = parseFloat(gapStr);
-
+    if (isMobile || isTablet) {
+      const firstItem = el.firstElementChild as HTMLElement | null;
+      const itemWidth = firstItem?.offsetWidth ?? 200; // sensible fallback width
+      const styles = getComputedStyle(el) as CSSStyleDeclaration;
+      const gapStr = (styles.columnGap || styles.gap || "0").toString();
+      const gap = parseFloat(gapStr);
       amount = itemWidth + (Number.isFinite(gap) ? gap : 0);
     } else {
       amount = Math.max(320, Math.floor(el.clientWidth * 0.9));
@@ -94,9 +95,8 @@ const gap = parseFloat(gapStr);
     const step = (ts: number) => {
       if (!scrollStateRef.current) return;
       const { start, from, to, duration } = scrollStateRef.current;
-      // deltaTime in ms (not strictly needed for absolute-time easing, but kept for clarity)
-      const dt = scrollStateRef.current.lastTs != null ? ts - scrollStateRef.current.lastTs : 0;
-      scrollStateRef.current.lastTs = ts;
+  // track last timestamp if needed in future for velocity-based easing
+  scrollStateRef.current.lastTs = ts;
 
       const elapsed = ts - start;
       const t = Math.max(0, Math.min(1, elapsed / duration));
@@ -232,7 +232,7 @@ const gap = parseFloat(gapStr);
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none ${
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] md:w-[280px] lg:w-[320px] flex-none ${
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
@@ -245,7 +245,7 @@ const gap = parseFloat(gapStr);
               <div className="relative">
                 {/* Screenshot/App Preview - match New Release sizing (310x310 box) */}
                 <div className="relative pt-1">
-                  <div className="mx-auto w-[310px] h-[310px] sm:w-[206px] sm:h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
+                  <div className="mx-auto w-[206px] h-[206px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] lg:w-[310px] lg:h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
                     <div className="relative w-full h-full overflow-hidden rounded-lg">
                       {/* Numbering overlay for events */}
                       {type === "events" && (
@@ -313,32 +313,31 @@ const gap = parseFloat(gapStr);
                 )}
               </div>
 
-              <div className="mx-auto w-[310px] sm:w-[206px]">
+              <div className="mx-auto w-[206px] sm:w-[240px] md:w-[280px] lg:w-[310px]">
               <CardContent className="p-[6px]" style={{ backgroundColor: "#D1E2EA" }}>
                 {/* App Icon and Basic Info */}
                 <div className="flex items-start space-x-4 mb-2">
                   <Image
                     src={item.iconUrl}
                     alt={item.name}
-                    width={80}
-                    height={80}
+                    width={54}
+                    height={54}
                     unoptimized
-                     className="w-[80px] h-[80px] sm:w-[64px] sm:h-[64px] rounded-2xl object-cover object-center flex-shrink-0"
+                    className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] rounded-xl object-cover object-center flex-shrink-0"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src =
                         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRDOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
                     }}
                   />
-              <div className="flex-1 min-w-0">
-<h3 className="font-bold text-xl sm:text-sm mb-1 truncate notranslate text-sky-500" translate="no">
-  {item.name}
-</h3>
-<p className="text-base sm:text-xs text-muted-foreground truncate notranslate" translate="no">
-  {item.developer}
-</p>
-</div>
-
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-lg sm:text-xl md:text-xl mb-1 truncate notranslate text-amber-400" translate="no">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm sm:text-base md:text-base text-muted-foreground truncate notranslate" translate="no">
+                      {item.developer}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Rating and Stats */}
@@ -357,7 +356,7 @@ const gap = parseFloat(gapStr);
                 {item.tags && item.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {item.tags.slice(0, 2).map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm sm:text-sm px-2 sm:px-2.5 py-0.5 sm:py-0.5">
+                      <Badge key={index} variant="secondary" className="text-sm sm:text-base px-2.5 sm:px-3 py-0.5 sm:py-1">
                         {tag}
                       </Badge>
                     ))}
