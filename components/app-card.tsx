@@ -287,8 +287,9 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none"
-        style={{ backgroundColor: '#D1E2EA' }}
+        className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none ${
+    isEvent ? "event-glow-card" : "allapps-glow-card"
+  }`}
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
