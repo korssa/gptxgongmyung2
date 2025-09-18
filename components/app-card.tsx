@@ -80,7 +80,6 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
       : app.iconUrl;
     return (
       <>
-        <Card
          <Card className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 shadow group overflow-hidden"
             style={{ backgroundColor: '#D1E2EA' }}
           onMouseEnter={blockTranslationFeedback}
