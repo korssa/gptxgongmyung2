@@ -232,14 +232,9 @@ export function GalleryManager({
           items.map((item, index) => (
             <Card
               key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] md:w-[280px] lg:w-[320px] flex-none ${
-                type === "featured"
-                  ? "relative featured-glow-card"
-                  : type === "events"
-                  ? "relative events-card"
-                  : "relative allapps-glow-card"
-              }`}
-              style={ type === "events" ? { backgroundColor: "#000000" } : { backgroundColor: "#D1E2EA" } }
+              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] md:w-[280px] lg:w-[320px] flex-none relative ${
+                type === "featured" ? "featured-glow-card" : type === "events" ? "events-card" : "allapps-glow-card"
+              } ${type === "events" ? "bg-black sm:bg-[#D1E2EA]" : "bg-[#D1E2EA]"}`}
               onMouseEnter={blockTranslationFeedback}
             >
               <div className="relative">
