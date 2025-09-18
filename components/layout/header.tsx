@@ -44,25 +44,8 @@ export function Header({
           </span>
         </div>
 
-        {/* 뷰 모드 토글 */}
-        <div className="flex items-center space-x-1 border border-white/30 rounded-md p-1">
-          <Button
-            variant={viewMode === "grid" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => onViewModeChange("grid")}
-            className={`h-8 w-8 p-0 ${viewMode === "grid" ? "bg-white text-blue-600" : "text-white hover:bg-white/20"}`}
-          >
-            <Grid className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => onViewModeChange("list")}
-            className={`h-8 w-8 p-0 ${viewMode === "list" ? "bg-white text-blue-600" : "text-white hover:bg-white/20"}`}
-          >
-            <List className="h-4 w-4" />
-          </Button>
-        </div>
+        {/* 뷰 모드 토글 자리: 빈 공간 유지 */}
+        <div className="flex items-center space-x-1 border border-white/30 rounded-md p-1" style={{ width: 64, height: 36 }} />
 
         {/* 구글 번역 위젯 */}
         <GoogleTranslateWidget />
