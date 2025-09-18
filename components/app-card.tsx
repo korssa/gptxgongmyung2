@@ -95,7 +95,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
                 }}
               />
             </div>
-            <h3 className="text-xs sm:text-base font-bold text-center mt-2 truncate notranslate app-name-fixed text-sky-400 sm:text-black" translate="no">{app.name}</h3>
+            <h3 className="text-sm sm:text-xl font-bold text-center mt-2 truncate notranslate app-name-fixed text-sky-400 sm:text-black" translate="no">{app.name}</h3>
             <p className="text-xs sm:text-sm text-muted-foreground text-center truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
             <div className="mt-auto flex flex-col items-center gap-1">
               {app.status === "published" ? (
@@ -178,7 +178,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
             <div className="flex justify-between items-start h-full">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-base sm:text-lg notranslate app-name-fixed text-sky-400 sm:text-black" translate="no">{app.name}</h3>
+                  <h3 className="font-semibold text-sm sm:text-lg notranslate app-name-fixed text-sky-400 sm:text-black" translate="no">{app.name}</h3>
                   {/* 상태/스토어 배지 */}
                   <Badge className={`text-xs ${getStatusColor(app.status)} text-white`}>
                     {app.status}
