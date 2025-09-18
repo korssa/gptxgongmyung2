@@ -149,8 +149,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
     return (
       <>
         <Card
-          className="flex flex-row overflow-hidden hover:shadow-lg transition-shadow"
-          style={{ backgroundColor: '#D1E2EA' }}
+           className="w-[150px] sm:w-[170px] aspect-[3/4] flex-shrink-0 p-2 shadow group overflow-hidden bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
           onMouseEnter={blockTranslationFeedback}
         >
           {/* App Icon */}
@@ -287,8 +286,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[310px] sm:w-[256px] flex-none"
-        style={{ backgroundColor: '#D1E2EA' }}
+          className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none bg-black sm:bg-[#D1E2EA] text-white sm:text-black"
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
