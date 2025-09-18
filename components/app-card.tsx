@@ -387,39 +387,40 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
 
         {/* Download Section - align with New Release */}
   <div className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
-          <div className="flex flex-col items-start sm:items-center space-y-0 sm:space-y-1">
+          <div className="flex flex-col items-center space-y-1">
             {/* 하단 2줄 - 다운로드 버튼 */}
-            <div className="w-full sm:w-auto">
-              {app.status === "published" ? (
-                <Button
-                  size="sm"
-                  className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[120px] justify-start"
-                  onClick={handleStoreView}
-                >
-                  <Download className="h-4 w-4" />
-                  {getButtonText()}
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] sm:min-w-[120px] justify-start"
-                  disabled
-                >
-                  Coming soon
-                </Button>
-              )}
-            </div>
+          <div className="w-full sm:w-auto flex justify-center">
+  {app.status === "published" ? (
+    <Button
+      size="sm"
+      className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-green-700 hover:bg-green-800 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[120px] mx-auto"
+      onClick={handleStoreView}
+    >
+      <Download className="h-4 w-4" />
+      {getButtonText()}
+    </Button>
+  ) : (
+    <Button
+      size="sm"
+      className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] sm:min-w-[120px] mx-auto"
+      disabled
+    >
+      Coming soon
+    </Button>
+  )}
+</div>
 
-            {/* 하단 1줄 - 스토어 배지 */}
-            <div className="h-10 sm:h-6">
-              <Image
-                src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
-                alt="스토어 배지"
-                width={140}
-                height={32}
-                className="h-10 sm:h-6 object-contain"
-              />
-            </div>
+{/* 스토어 뱃지 */}
+<div className="h-10 sm:h-6 flex justify-center">
+  <Image
+    src={app.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
+    alt="스토어 배지"
+    width={140}
+    height={32}
+    className="h-10 sm:h-6 object-contain mx-auto"
+  />
+</div>
+
           </div>
         </div>
         </div>
