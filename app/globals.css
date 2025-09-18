@@ -1,3 +1,6 @@
+.goog-logo-link { font-size: 0 !important; }
+.goog-logo-link:after { content: "By"; font-size: 11px; color: #fff; letter-spacing: 0.5px; font-family: 'Arial', 'Segoe UI', 'sans-serif' !important; }
+html[lang^="ko"] .goog-logo-link:after { content: "By" !important; }
 @import "tailwindcss";
 @import "tw-animate-css";
 
