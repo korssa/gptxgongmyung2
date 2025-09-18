@@ -74,10 +74,6 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   };
   // Mini view: compact horizontal card for scrollers
   if (viewMode === "mini") {
-      const topImage =
-    (isFeatured || isEvent) && app.screenshotUrls?.[0]
-      ? app.screenshotUrls[0]
-      : app.iconUrl;
     return (
       <>
         <Card
@@ -87,11 +83,11 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-center">
               <Image
-                src={topImage}
+                src={app.iconUrl}
                 alt={app.name}
                 width={72}
                 height={72}
-                unoptimized={isBlobUrl(topImage)}
+                unoptimized={isBlobUrl(app.iconUrl)}
                 className="rounded-md"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -154,14 +150,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           onMouseEnter={blockTranslationFeedback}
         >
           {/* App Icon */}
-         <div className="w-28 h-28 flex-shrink-0 p-2">
+          <div className="w-24 h-24 flex-shrink-0 p-3">
             <Image
               src={app.iconUrl}
-  alt={app.name}
-  width={112} // or 100~110 정도
-  height={112}
-  unoptimized={isBlobUrl(app.iconUrl)}
-  className="w-full h-full object-cover object-center rounded-2xl"
+              alt={app.name}
+              width={96}
+              height={96}
+              unoptimized={isBlobUrl(app.iconUrl)}
+              className="w-full h-full object-cover object-center rounded-xl"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
@@ -287,14 +283,14 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   return (
     <>
       <Card
-        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[360px] sm:w-[256px] flex-none"
+        className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] md:w-[280px] lg:w-[320px] flex-none"
         style={{ backgroundColor: '#D1E2EA' }}
         onMouseEnter={blockTranslationFeedback}
       >
         <div className="relative">
           {/* Screenshot/App Preview (match New Release: fixed 310x310 box) */}
           <div className="relative pt-1">
-            <div className="mx-auto w-[310px] h-[310px] sm:w-[206px] sm:h-[206px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
+            <div className="mx-auto w-[206px] h-[206px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] lg:w-[310px] lg:h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
               <div className="relative w-full h-full overflow-hidden rounded-lg">
                 {app.screenshotUrls && app.screenshotUrls.length > 0 ? (
                   <Image
@@ -335,7 +331,7 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
           )}
         </div>
 
-  <div className="mx-auto w-[310px] sm:w-[206px]">
+  <div className="mx-auto w-[206px] sm:w-[240px] md:w-[280px] lg:w-[310px]">
   <CardContent className="p-[6px]" style={{ backgroundColor: '#D1E2EA' }}>
           {/* App Icon and Basic Info */}
           <div className="flex items-start space-x-4 mb-2">
@@ -344,16 +340,16 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
               alt={app.name}
               width={54}
               height={54}
-              className="w-[80px] h-[80px] sm:w-[54px] sm:h-[54px] rounded-xl object-cover object-center flex-shrink-0"
+              className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] rounded-xl object-cover object-center flex-shrink-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRNOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
               }}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg sm:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
-           <p className="text-sm sm:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
-      </div>
+              <h3 className="font-bold text-lg sm:text-xl md:text-xl mb-1 truncate notranslate app-name-fixed text-amber-400" translate="no">{app.name}</h3>
+              <p className="text-sm sm:text-base md:text-base text-muted-foreground truncate notranslate app-developer-fixed" translate="no">{app.developer}</p>
+            </div>
           </div>
 
           {/* Rating and Stats */}
