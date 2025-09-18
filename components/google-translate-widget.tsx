@@ -229,15 +229,18 @@ export function GoogleTranslateWidget() {
         option.value = code; // ✅ 정규화된 코드로 교체
       });
 
-      options.sort((a, b) => a.text.localeCompare(b.text));
+      // 대표 언어(현재 선택값)를 맨 위에, 나머지는 알파벳순으로
+      const selectedCode = normalizeCode(selectedValue);
+      const selectedOption = options.find((opt) => opt.value === selectedCode);
+      const otherOptions = options.filter((opt) => opt.value !== selectedCode);
+      otherOptions.sort((a, b) => a.text.localeCompare(b.text));
       combo.innerHTML = "";
-      options.forEach((opt) => combo.appendChild(opt));
-
-      const selectedOption = options.find((opt) => opt.value === normalizeCode(selectedValue));
       if (selectedOption) {
+        combo.appendChild(selectedOption);
         selectedOption.selected = true;
         combo.value = selectedOption.value;
       }
+      otherOptions.forEach((opt) => combo.appendChild(opt));
     }
     function hideFeedbackElements() {
       const feedbackSelectors = [
