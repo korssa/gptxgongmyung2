@@ -102,3 +102,16 @@ iframe.skiptranslate {
   visibility: hidden !important;
 }
 
+
+/* 🌿 태블릿 대응: Google Translate iframe은 보이되(레이아웃 보정),
+   실제로는 투명/비상호작용으로 처리하여 화면 사라짐 문제 방지 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  iframe.skiptranslate {
+    visibility: visible !important;      /* 태블릿에서 완전 숨김 대신 보이게 처리 */
+    opacity: 0 !important;               /* 화면엔 보이지 않지만 */
+    pointer-events: none !important;      /* 클릭/포커스 차단 */
+    height: 0 !important;                 /* 레이아웃 영향 최소화 */
+    width: 0 !important;
+  }
+}
+
