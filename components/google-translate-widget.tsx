@@ -229,17 +229,31 @@ export function GoogleTranslateWidget() {
         option.value = code; // ✅ 정규화된 코드로 교체
       });
 
-      // 안내 옵션(- English)을 맨 위에 강제로 추가
+      // 안내 옵션(- English)을 항상 맨 위에 추가 (중복 방지)
+      combo.innerHTML = "";
       const guideOption = document.createElement('option');
       guideOption.value = "";
       guideOption.text = "- English";
       guideOption.dataset.updated = "true";
+      combo.appendChild(guideOption);
+      guideOption.selected = true;
+      combo.value = "";
+
+      // 영어(en) 옵션 항상 두 번째
+      const enOption = options.find((opt) => opt.value === "en");
+      if (enOption) {
+        combo.appendChild(enOption);
+        if (combo.value === "") {
+          enOption.selected = true;
+          combo.value = "en";
+        }
+      }
 
       // 나머지 옵션 정렬
       const selectedCode = normalizeCode(selectedValue);
-      const selectedOption = options.find((opt) => opt.value === selectedCode && selectedCode !== "");
+      const selectedOption = options.find((opt) => opt.value === selectedCode && selectedCode !== "" && selectedCode !== "en");
       const otherOptions = options
-        .filter((opt) => opt.value !== selectedCode && opt.value !== "")
+        .filter((opt) => opt.value !== selectedCode && opt.value !== "" && opt.value !== "en")
         .sort((a, b) => {
           const aIsDash = a.text.trim().startsWith("-");
           const bIsDash = b.text.trim().startsWith("-");
@@ -247,25 +261,12 @@ export function GoogleTranslateWidget() {
           if (!aIsDash && bIsDash) return 1;
           return a.text.localeCompare(b.text);
         });
-      combo.innerHTML = "";
-      combo.appendChild(guideOption);
-      guideOption.selected = true;
-      combo.value = "";
-      // 영어(en)가 있으면 항상 두 번째로 추가하고, combo.value가 빈값이면 en을 선택
-      const enOption = options.find((opt) => opt.value === "en");
-      if (enOption) {
-        combo.appendChild(enOption);
-        if (!selectedOption && combo.value === "") {
-          enOption.selected = true;
-          combo.value = "en";
-        }
-      }
-      if (selectedOption && selectedOption.value !== "en") {
+      if (selectedOption) {
         combo.appendChild(selectedOption);
         selectedOption.selected = false;
       }
       otherOptions.forEach((opt) => {
-        if (opt.value !== "en") combo.appendChild(opt);
+        combo.appendChild(opt);
       });
     }
     function hideFeedbackElements() {
