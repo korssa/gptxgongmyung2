@@ -1527,23 +1527,6 @@ h4.notranslate[translate="no"] * {
     opacity: 0.2; /* 빛 배경 투명도 낮춰서 내용이 더 잘 보이게 */
   }
 }
-@media (max-width: 767px) {
-  .event-glow-card {
-    background-color: black !important;
-  }
-
-  .event-glow-card::before {
-    background: none !important;         /* 또는 반투명 gradient */
-    opacity: 0.2 !important;             /* 빛 효과 약화 */
-  }
-
-  .event-number {
-    background-color: rgba(0, 0, 0, 0.6) !important;
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.4) !important;
-  }
-}
-
 
 /* 이벤트 메일 버튼 금빛 효과 */
 @keyframes mailButtonGlow {
