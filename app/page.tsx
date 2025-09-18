@@ -1073,8 +1073,7 @@ function HomeContent() {
                      <div className="container mx-auto text-center max-w-6xl" style={{ maxWidth: '1152px' }}>
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                                                                                                                                                                                                                               <div>
-                                                                                                                                                <h4 className="font-medium mb-3 text-amber-400 text-base" translate="yes" onMouseEnter={blockTranslationFeedback}>{t("exhibition")}</h4>
+         <div>  <h4 className="font-medium mb-3 text-amber-400 text-base" translate="yes" onMouseEnter={blockTranslationFeedback}>{t("exhibition")}</h4>
                    <div className="space-y-3">
                                                                                           <button 
                           onClick={(e) => handleFooterLinkClick(handleAllAppsClick, e)} 
@@ -1113,7 +1112,7 @@ function HomeContent() {
                 </div>
 
                                                                             <div>
-                                                                                                                                                                       <h4 className="font-medium mb-3 text-amber-400 text-base" translate="yes" onMouseEnter={blockTranslationFeedback}>{t("forYou")}</h4>
+                         <h4 className="font-medium mb-3 text-amber-400 text-base" translate="yes" onMouseEnter={blockTranslationFeedback}>{t("forYou")}</h4>
                    <div className="space-y-3">
                                                                                                                    <button 
                            onClick={(e) => handleFooterLinkClick(handleAppStoryClick, e)} 
