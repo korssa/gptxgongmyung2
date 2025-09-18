@@ -236,10 +236,10 @@ export function GalleryManager({
                 type === "featured"
                   ? "relative featured-glow-card"
                   : type === "events"
-                  ? ""
+                  ? "relative events-card"
                   : "relative allapps-glow-card"
               }`}
-              style={{ backgroundColor: "#D1E2EA" }}
+              style={ type === "events" ? { backgroundColor: "#000000" } : { backgroundColor: "#D1E2EA" } }
               onMouseEnter={blockTranslationFeedback}
             >
               <div className="relative">
