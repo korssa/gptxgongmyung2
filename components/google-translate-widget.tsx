@@ -236,21 +236,22 @@ export function GoogleTranslateWidget() {
       guideOption.text = "- English";
       guideOption.dataset.updated = "true";
       combo.appendChild(guideOption);
+      guideOption.selected = true;
+      combo.value = "";
 
-      // 영어(en) 옵션 항상 두 번째 및 기본 선택
+      // 영어(en) 옵션 항상 두 번째
       const enOption = options.find((opt) => opt.value === "en");
       if (enOption) {
         combo.appendChild(enOption);
-        // Set default selected to English only if no previous selection exists
-        if (!selectedValue || selectedValue === "") {
+        if (combo.value === "") {
           enOption.selected = true;
           combo.value = "en";
         }
       }
 
       // 나머지 옵션 정렬
-  const selectedCode = normalizeCode(selectedValue);
-  const selectedOption = options.find((opt) => opt.value === selectedCode && selectedCode !== "" && selectedCode !== "en");
+      const selectedCode = normalizeCode(selectedValue);
+      const selectedOption = options.find((opt) => opt.value === selectedCode && selectedCode !== "" && selectedCode !== "en");
       const otherOptions = options
         .filter((opt) => opt.value !== selectedCode && opt.value !== "" && opt.value !== "en")
         .sort((a, b) => {
@@ -262,9 +263,7 @@ export function GoogleTranslateWidget() {
         });
       if (selectedOption) {
         combo.appendChild(selectedOption);
-        // Make it visible but do not override user's explicit selection state
-        selectedOption.selected = true;
-        combo.value = selectedCode;
+        selectedOption.selected = false;
       }
       otherOptions.forEach((opt) => {
         combo.appendChild(opt);
