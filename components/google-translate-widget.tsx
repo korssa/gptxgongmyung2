@@ -1,473 +1,569 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Trash2, Edit, Star, Download, User } from "lucide-react";
-import { blockTranslationFeedback, createAdminButtonHandler } from "@/lib/translation-utils";
-import { AdminFeaturedUploadDialog } from "./admin-featured-upload-dialog";
-import { AdminEventsUploadDialog } from "./admin-events-upload-dialog";
-import { AppItem } from "@/types";
-import Image from "next/image";
+import { useEffect } from "react";
 
-interface GalleryManagerProps {
-  type: "gallery" | "featured" | "events" | "normal";
-  title: string;
-  description: string;
-  onBack?: () => void;
-  isAdmin?: boolean;
-}
-
-export function GalleryManager({
-  type,
-  title,
-  description,
-  onBack,
-  isAdmin = false,
-}: GalleryManagerProps) {
-  const [items, setItems] = useState<AppItem[]>([]);
-  // Horizontal scroller: no pagination
-  // Admin upload dialog states (featured/events 전용)
-  const [isFeaturedDialogOpen, setFeaturedDialogOpen] = useState(false);
-  const [isEventsDialogOpen, setEventsDialogOpen] = useState(false);
-  const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const scrollAnimRef = useRef<number | null>(null);
-  const scrollStateRef = useRef<{
-    start: number;
-    from: number;
-    to: number;
-    duration: number;
-    lastTs?: number;
-  } | null>(null);
-
-  // Cancel any ongoing RAF scroll animation
-  const cancelScrollAnimation = () => {
-    if (scrollAnimRef.current != null) {
-      cancelAnimationFrame(scrollAnimRef.current);
-      scrollAnimRef.current = null;
-    }
-    scrollStateRef.current = null;
-  };
-
-  // Scroll helper with delta-time based animation for smooth and consistent speed
-  // mobile (<640px) -> one card per click; otherwise ~viewport width
-  const scrollByStep = (dir: -1 | 1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-
-    // Determine distance to travel
-    const width = typeof window !== "undefined" ? window.innerWidth : 1200;
-    const isMobile = width < 640;
-    const isTablet = width >= 640 && width < 1024;
-    let amount = 0;
-    if (isMobile || isTablet) {
-      const firstItem = el.firstElementChild as HTMLElement | null;
-      const itemWidth = firstItem?.offsetWidth ?? 200; // sensible fallback width
-      const styles = getComputedStyle(el) as CSSStyleDeclaration;
-      const gapStr = (styles.columnGap || styles.gap || "0").toString();
-      const gap = parseFloat(gapStr);
-      amount = itemWidth + (Number.isFinite(gap) ? gap : 0);
-    } else {
-      amount = Math.max(320, Math.floor(el.clientWidth * 0.9));
-    }
-
-    // Set up animation state
-    const from = el.scrollLeft;
-    const to = from + dir * amount;
-
-    // Cancel prior animation if any
-    cancelScrollAnimation();
-
-    // Duration tuned by distance (px per second ~ 1600)
-    const pxPerSecond = 1600; // adjust for preferred speed
-    const duration = Math.max(220, Math.min(600, Math.abs(amount) / pxPerSecond * 1000));
-
-    scrollStateRef.current = {
-      start: performance.now(),
-      from,
-      to,
-      duration,
-    };
-
-    const easeInOutQuad = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
-
-    const step = (ts: number) => {
-      if (!scrollStateRef.current) return;
-      const { start, from, to, duration } = scrollStateRef.current;
-  // track last timestamp if needed in future for velocity-based easing
-  scrollStateRef.current.lastTs = ts;
-
-      const elapsed = ts - start;
-      const t = Math.max(0, Math.min(1, elapsed / duration));
-      const eased = easeInOutQuad(t);
-      const value = from + (to - from) * eased;
-      el.scrollLeft = value;
-
-      if (t < 1) {
-        scrollAnimRef.current = requestAnimationFrame(step);
-      } else {
-        cancelScrollAnimation();
-      }
-    };
-
-    scrollAnimRef.current = requestAnimationFrame(step);
-  };
-
-  const loadItems = useCallback(async () => {
-    try {
-      // 'normal' 뷰는 실제로 gallery-gallery 폴더에서 관리되므로 API는 gallery로 조회
-      const queryType = type === "normal" ? "gallery" : type;
-      const response = await fetch(`/api/gallery?type=${queryType}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (queryType === "gallery") {
-          setItems(
-            data.filter(
-              (item: AppItem) =>
-                item.status === "published" ||
-                item.status === "in-review" ||
-                item.status === "development"
-            )
-          );
-        } else {
-          setItems(data.filter((item: AppItem) => item.status === "published"));
-        }
-      }
-    } catch {
-      // noop
-    }
-  }, [type]);
+export function GoogleTranslateWidget() {
+  // ✅ 컴포넌트 안에 선언
+  function normalizeCode(code: string): string {
+    if (!code) return "";
+    const parts = code.split("-");
+    if (parts.length === 1) return parts[0].toLowerCase(); 
+    return `${parts[0].toLowerCase()}-${parts[1].toUpperCase()}`;
+  }
 
   useEffect(() => {
-    loadItems();
-  }, [type, loadItems]);
+    function buildMaps() {
+      const entries: Array<[string, string, string]> = [
+  ["en", "-", "English"],
+  ["es", "-", "Español"],
+ 
+  ["fr", "-", "Français"],
+  ["de", "-", "Deutsch"],
+  ["ar", "-", "العربية"],
+  ["ru", "-", "Русский"],
+  ["pt", "-", "Português"],
+  ["ja", "-", "日本語"],
+  ["ko", "-", "한국어"],
+    ["af", "South Africa", "Afrikaans"],
+["am", "Ethiopia", "አማርኛ"],
 
-  // delete handler for admin actions
-  const handleDelete = (itemId: string) => {
-    createAdminButtonHandler(async () => {
-      const item = items.find((i) => i.id === itemId);
-      if (confirm(`"${item?.name}"을(를) 삭제하시겠습니까?`)) {
+["az", "Azerbaijan", "Azərbaycan dili"],
+["be", "Belarus", "Беларуская"],
+["bg", "Bulgaria", "Български"],
+["bn", "Bangladesh", "বাংলা"],
+["bs", "Bosnia", "Bosanski"],
+["ca", "Catalonia", "Català"],
+["ceb", "Philippines", "Cebuano"],
+["cs", "Czech Republic", "Čeština"],
+["cy", "Wales", "Cymraeg"],
+["pt-BR", "Brazil", "Português (BR)"],
+
+["el", "Greece", "Ελληνικά"],
+
+["en-GB", "UK", "English"],
+
+["en-au", "Australia", "English"],
+["eo", "Esperanto", "Esperanto"],
+
+["es-mx", "Mexico", "Español (México)"],
+["et", "Estonia", "Eesti"],
+["fa", "Iran", "فارسی"],
+["fi", "Finland", "Suomi"],
+
+["fr-ca", "Canada", "Français"],
+["fy", "Netherlands", "Frysk"],
+["ga", "Ireland", "Gaeilge"],
+["gd", "Scotland", "Gàidhlig"],
+["gl", "Spain", "Galego"],
+["gu", "India", "ગુજરાતી"],
+["ha", "Nigeria", "Hausa"],
+["haw", "Hawaii", "ʻŌlelo Hawaiʻi"],
+["he", "Israel", "עברית"],
+["hi", "India", "हिन्दी"],
+["hmn", "Hmong", "Hmoob"],
+["hr", "Croatia", "Hrvatski"],
+["ht", "Haiti", "Kreyòl ayisyen"],
+["hu", "Hungary", "Magyar"],
+["hy", "Armenia", "Հայերեն"],
+["id", "Indonesia", "Bahasa Indonesia"],
+["ig", "Nigeria", "Igbo"],
+["is", "Iceland", "Íslenska"],
+["it", "Italy", "Italiano"],
+
+["jv", "Indonesia", "Jawa"],
+["ka", "Georgia", "ქართული"],
+["kk", "Kazakhstan", "Қазақ тілі"],
+["km", "Cambodia", "ភាសាខ្មែរ"],
+["kn", "India", "ಕನ್ನಡ"],
+
+["ku", "Kurdistan", "Kurdî"],
+["ky", "Kyrgyzstan", "Кыргызча"],
+["la", "Ancient Rome", "Latina"],
+["lb", "Luxembourg", "Lëtzebuergesch"],
+["lo", "Laos", "ລາວ"],
+["lt", "Lithuania", "Lietuvių"],
+["lv", "Latvia", "Latviešu"],
+["mg", "Madagascar", "Malagasy"],
+["mi", "New Zealand", "Māori"],
+["mk", "North Macedonia", "Македонски"],
+["ml", "India", "മലയാളം"],
+["mn", "Mongolia", "Монгол"],
+["mr", "India", "मराठी"],
+["ms", "Malaysia", "Bahasa Melayu"],
+["mt", "Malta", "Malti"],
+["my", "Myanmar", "မြန်မာစာ"],
+["ne", "Nepal", "नेपाली"],
+["nl", "Netherlands", "Nederlands"],
+["no", "Norway", "Norsk"],
+["ny", "Malawi", "Nyanja"],
+["or", "India", "ଓଡ଼ିଆ"],
+["pa", "India", "ਪੰਜਾਬੀ"],
+["pl", "Poland", "Polski"],
+["ps", "Afghanistan", "پښتو"],
+
+["pt-br", "Brazil", "Português (BR)"],
+["ro", "Romania", "Română"],
+
+["rw", "Rwanda", "Kinyarwanda"],
+["sd", "Pakistan", "سنڌي"],
+["si", "Sri Lanka", "සිංහල"],
+["sk", "Slovakia", "Slovenčina"],
+["sl", "Slovenia", "Slovenščina"],
+["sm", "Samoa", "Gagana Samoa"],
+["sn", "Zimbabwe", "Shona"],
+["so", "Somalia", "Soomaali"],
+["sq", "Albania", "Shqip"],
+["sr", "Serbia", "Српски"],
+["st", "Lesotho", "Sesotho"],
+["su", "Indonesia", "Basa Sunda"],
+["sv", "Sweden", "Svenska"],
+["sw", "East Africa", "Kiswahili"],
+["ta", "India", "தமிழ்"],
+["te", "India", "తెలుగు"],
+["tg", "Tajikistan", "Тоҷикӣ"],
+["th", "Thailand", "ไทย"],
+["tk", "Turkmenistan", "Türkmençe"],
+["tl", "Philippines", "Tagalog"],
+["tr", "Turkey", "Türkçe"],
+["tt", "Tatarstan", "Татар"],
+["ug", "Xinjiang", "ئۇيغۇرچە"],
+["uk", "Ukraine", "Українська"],
+["ur", "Pakistan", "اردو"],
+["uz", "Uzbekistan", "Oʻzbekcha"],
+["vi", "Vietnam", "Tiếng Việt"],
+["xh", "South Africa", "isiXhosa"],
+["yi", "Ashkenazi", "ייִדיש"],
+["yo", "Nigeria", "Yorùbá"],
+["zu", "South Africa", "isiZulu"],
+];
+
+   // 중국어는 별도 매핑 (강제 오버라이드)
+     const langLabelMap: Record<string, string> = {
+  // === 중국어 계열 ===
+  zh: "China - 中文(简体)",
+  "zh-CN": "- - 中文(简体)",
+  "zh-SG": "Singapore - 中文(简体, 新加坡)",
+  "zh-MY": "Malaysia - 中文(简体, 马来西亚)",
+  "zh-TW": "Taiwan - 中文(繁體)",
+  "zh-HK": "Hong Kong - 中文(繁體, 香港)",
+  "zh-MO": "Macau - 中文(繁體, 澳門)",
+
+  // === 영어 계열 ===
+  "en-GB": "UK - English",
+  "en-CA": "Canada - English",
+  "en-AU": "Australia - English",
+  "en-IN": "India - English",
+  "en-SG": "Singapore - English",
+  "en-ZA": "South Africa - English",
+  "en-IE": "Ireland - English",
+  "en-NZ": "New Zealand - English",
+
+  // === 스페인어 계열 ===
+  "es-MX": "Mexico - Español (México)",
+  "es-419": "Latin America - Español (LatAm)",
+
+  // === 프랑스어 계열 ===
+  "fr-CA": "Canada - Français",
+
+  // === 포르투갈어 계열 ===
+  "pt-BR": "Brazil - Português (BR)",
+
+  // === 세르비아 / 우즈벡 / 몽골어 등 스크립트 변형 ===
+  "sr-Latn": "Serbia - Srpski (Latin)",
+  "uz-Cyrl": "Uzbekistan - Oʻzbekcha (Cyrillic)",
+  "mn-Cyrl": "Mongolia - Монгол (Cyrillic)",
+};
+
+      const countryByLang: Record<string, string> = {};
+      const nativeByLang: Record<string, string> = {};
+      const included = new Set<string>();
+
+      for (const [code, country, native] of entries) {
+        const normCode = normalizeCode(code); // ✅ 정규화
+        const base = normCode.split("-")[0];
+
+        countryByLang[normCode] = country;
+        nativeByLang[normCode] = native;
+
+        if (!countryByLang[base]) countryByLang[base] = country;
+        if (!nativeByLang[base]) nativeByLang[base] = native;
+
+        included.add(normCode);
+      }
+
+      // 중국어 매핑 강제 적용
+      for (const code in langLabelMap) {
+        const [country, native] = langLabelMap[code].split(" - ");
+        countryByLang[code] = country;
+        nativeByLang[code] = native;
+        included.add(code);
+      }
+
+      return {
+        countryByLang,
+        nativeByLang,
+        includedLanguages: Array.from(included).join(","),
+      };
+    }
+
+    // ====== 2) 콤보 옵션 업데이트 ======
+    function updateLanguageOptions() {
+      const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (!combo || !combo.options) return;
+
+      const { countryByLang, nativeByLang } = buildMaps();
+      const options = Array.from(combo.options);
+      const selectedValue = combo.value;
+
+      options.forEach((option) => {
+        if (option.dataset.updated === "true") return;
+
+        const code = normalizeCode(option.value);
+        const base = code.split("-")[0];
+
+        const country = countryByLang[code] ?? countryByLang[base] ?? base.toUpperCase();
+        const native = nativeByLang[code] ?? nativeByLang[base] ?? (option.text.trim() || base);
+
+        option.text = `${country} - ${native}`;
+        option.dataset.updated = "true";
+        option.value = code;
+      });
+
+      // 안내 옵션(- English)을 항상 맨 위에 추가
+      combo.innerHTML = "";
+      const guideOption = document.createElement("option");
+      guideOption.value = "";
+      guideOption.text = "- English";
+      guideOption.dataset.updated = "true";
+      combo.appendChild(guideOption);
+
+      // ✅ 영어(en)를 무조건 두 번째에 추가 + 기본 선택
+      const enOption = options.find((opt) => normalizeCode(opt.value) === "en");
+      if (enOption) {
+        combo.appendChild(enOption);
+        enOption.selected = true; // <-- 기본 선택
+        combo.value = "en"; // <-- 값도 en으로 강제
+      } else {
+        // fallback: 만약 영어가 없으면 안내 옵션 선택
+        guideOption.selected = true;
+        combo.value = "";
+      }
+
+      // ✅ 스승님 지정 우선순위 언어들 (영어 제외)
+      const priority = ["es", "fr", "de", "ar", "ru", "pt", "zh-CN", "ja", "ko"];
+
+      const prioritizedOptions = priority
+        .map((p) => options.find((opt) => normalizeCode(opt.value) === p))
+        .filter((opt): opt is HTMLOptionElement => !!opt);
+
+      // ✅ 나머지 옵션 알파벳 정렬 (우선순위 언어들 제외)
+      const selectedCode = normalizeCode(selectedValue);
+      const selectedOption = options.find(
+        (opt) => opt.value === selectedCode && selectedCode !== "" && !priority.includes(normalizeCode(opt.value)) && normalizeCode(opt.value) !== "en"
+      );
+
+      const otherOptions = options
+        .filter(
+          (opt) =>
+            !priority.includes(normalizeCode(opt.value)) &&
+            normalizeCode(opt.value) !== "en" &&
+            opt.value !== selectedCode &&
+            opt.value !== ""
+        )
+        .sort((a, b) => a.text.localeCompare(b.text));
+
+      // ✅ 우선순위 옵션 먼저 추가 (영어 제외)
+      prioritizedOptions.forEach((opt) => combo.appendChild(opt));
+
+      // ✅ 선택된 옵션은 뒤에 추가 (우선순위에 없는 경우)
+      if (selectedOption) {
+        combo.appendChild(selectedOption);
+        selectedOption.selected = false;
+      }
+
+      // ✅ 나머지 알파벳 순 옵션 추가
+      otherOptions.forEach((opt) => combo.appendChild(opt));
+    }
+    function hideFeedbackElements() {
+      const feedbackSelectors = [
+        ".goog-te-balloon-frame",
+        ".goog-te-ftab",
+        ".goog-te-ftab-float",
+        ".goog-tooltip",
+        ".goog-tooltip-popup",
+        ".goog-te-banner-frame",
+        ".goog-te-spinner-pos",
+      ];
+      feedbackSelectors.forEach((selector) => {
+        document.querySelectorAll(selector).forEach((el) => {
+          const e = el as HTMLElement;
+          e.style.display = "none";
+          e.style.visibility = "hidden";
+          e.style.opacity = "0";
+        });
+      });
+    }
+
+    function handleAdminModeChange(enabled: boolean) {
+      try {
+        const saveDraftSafely = () => {
+          try {
+            const event = new CustomEvent("memo:save-draft");
+            window.dispatchEvent(event);
+          } catch {
+            // no-op
+          }
+        };
+        saveDraftSafely();
+      } catch {
+        // no-op
+      }
+
+      if (enabled) {
         try {
-          const response = await fetch(`/api/gallery?type=${type}&id=${itemId}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+          document.documentElement.setAttribute("translate", "no");
+          document.body.setAttribute("translate", "no");
+
+          const elements = document.querySelectorAll(
+            ".goog-te-combo, .goog-te-gadget, .skiptranslate, iframe[src*='translate']"
+          );
+          elements.forEach((el) => {
+            const e = el as HTMLElement;
+            e.style.display = "none";
+            e.style.visibility = "hidden";
+            e.style.opacity = "0";
+            e.style.pointerEvents = "none";
           });
-          if (response.ok) {
-            setItems((prev) => prev.filter((i) => i.id !== itemId));
-          } else {
-            alert("삭제에 실패했습니다.");
+
+          if (window.google) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (window.google as any).translate = {
+              TranslateElement: function () {
+                return null;
+              },
+            };
           }
         } catch {
-          alert("삭제 중 오류가 발생했습니다.");
+          // no-op
+        }
+      } else {
+        try {
+          document.documentElement.removeAttribute("translate");
+          document.body.removeAttribute("translate");
+
+          const elements = document.querySelectorAll(".goog-te-combo, .goog-te-gadget, .skiptranslate");
+          elements.forEach((el) => {
+            const e = el as HTMLElement;
+            e.style.display = "";
+            e.style.visibility = "";
+            e.style.opacity = "";
+            e.style.pointerEvents = "";
+          });
+
+          setTimeout(() => {
+            if (typeof window.googleTranslateElementInit === "function") {
+              window.googleTranslateElementInit();
+            }
+          }, 500);
+        } catch {
+          // no-op
         }
       }
-    })();
-  };
+    }
 
-  // pagination removed; render all items in a horizontal scroller
+    window.adminModeChange = handleAdminModeChange;
+
+    function initializeLanguageMapping() {
+      const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (!combo || combo.options.length < 2) return false;
+
+      updateLanguageOptions();
+      hideFeedbackElements();
+
+      combo.removeEventListener("change", handleComboChange);
+      combo.addEventListener("change", handleComboChange);
+
+      return true;
+    }
+
+    // 실시간 피드백 감시 루프 (5초마다 재시도)
+    let feedbackLoop: number | undefined;
+    function startFeedbackLoop() {
+      if (feedbackLoop) window.clearInterval(feedbackLoop);
+      feedbackLoop = window.setInterval(() => {
+        hideFeedbackElements();
+      }, 5000);
+    }
+
+    // 번역 피드백 DOM 전담 감시자
+    function watchTranslationFeedback() {
+      const feedbackObserver = new MutationObserver(() => {
+        hideFeedbackElements();
+      });
+
+      feedbackObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
+      return feedbackObserver;
+    }
+
+    function handlePageRefresh() {
+      sessionStorage.setItem("widget-needs-refresh", "true");
+    }
+
+   /* function checkAndRefreshWidget() {
+      const needsRefresh = sessionStorage.getItem("widget-needs-refresh");
+      if (needsRefresh === "true") {
+        sessionStorage.removeItem("widget-needs-refresh");
+        setTimeout(() => {
+          refreshWidget();
+        }, 1000);
+      }
+    } */
+
+    function handleComboChange() {
+      setTimeout(() => {
+        updateLanguageOptions();
+        hideFeedbackElements();
+        setTimeout(() => {
+          const el = document.getElementById("google_translate_element");
+          if (el) (el as HTMLElement).style.opacity = "0";
+        }, 1000);
+      }, 100);
+    }
+
+    function addRefreshButton() {
+      const existing = document.querySelector('button[title="Google Translate 위젯 새로고침"]');
+      if (existing) return;
+
+      const refreshButton = document.createElement("button");
+      refreshButton.textContent = "🔄";
+      refreshButton.title = "Google Translate 위젯 새로고침";
+      refreshButton.style.cssText = `
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 10000;
+        background: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      `;
+
+      refreshButton.addEventListener("click", () => {
+        //refreshWidget();
+      });
+
+      document.body.appendChild(refreshButton);
+    }
+
+    // Google 번역 스크립트 삽입
+    if (!document.querySelector('script[src*="translate.google.com"]')) {
+      const script = document.createElement("script");
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      script.async = true;
+      script.id = "google-translate-script";
+      document.head.appendChild(script);
+    }
+
+// 콜백 함수 설정 (layout은 조건부로만 추가)
+if (typeof window.googleTranslateElementInit !== "function") {
+  window.googleTranslateElementInit = () => {
+    const target = document.getElementById("google_translate_element");
+
+    if (window.__widget_initialized === true) return;
+    if (!target) return;
+
+    window.__widget_initialized = true; // 🎯 초기화 완료 플래그
+
+    if (window.google?.translate?.TranslateElement) {
+      const { countryByLang, nativeByLang, includedLanguages } = buildMaps();
+    
+
+new window.google.translate.TranslateElement(
+  {
+    pageLanguage: "en-us",
+     includedLanguages,
+    multilanguagePage: true,
+    autoDisplay: false,
+    layout: window.google.translate.TranslateElement?.InlineLayout?.HORIZONTAL || "horizontal",
+  },
+  "google_translate_element"
+);
+
+setTimeout(() => {
+  updateLanguageOptions(); // ✅ 이걸 콤보 생성 직후 강제로 실행
+}, 300);
+// ✅ 초기 진입 시 라벨 매핑을 delay 후 강제 적용
+setTimeout(() => {
+  initializeLanguageMapping();
+}, 800); // 약간의 렌더링 대기 시간
+
+    }
+  };
+}
+
+    // 옵저버 및 루프 시작
+    const initObserver = new MutationObserver(() => {
+      if (initializeLanguageMapping()) {
+        initObserver.disconnect();
+        startFeedbackLoop();
+      }
+    });
+
+    let feedbackObserver: MutationObserver | null = null;
+
+    const onLoad = () => {
+      //checkAndRefreshWidget();
+      initObserver.observe(document.body, { childList: true, subtree: true });
+      feedbackObserver = watchTranslationFeedback();
+    };
+
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      onLoad();
+    } else {
+      window.addEventListener("load", onLoad);
+    }
+
+    window.addEventListener("beforeunload", handlePageRefresh);
+
+    if (process.env.NODE_ENV === "development") {
+      setTimeout(addRefreshButton, 2000);
+    }
+
+    // cleanup
+    return () => {
+      const existingScript = document.querySelector('script[src*="translate.google.com"]');
+      if (existingScript) document.head.removeChild(existingScript);
+
+      initObserver.disconnect();
+      window.removeEventListener("beforeunload", handlePageRefresh);
+      window.removeEventListener("load", onLoad);
+
+      const refreshButton = document.querySelector('button[title="Google Translate 위젯 새로고침"]');
+      if (refreshButton && refreshButton.parentElement) {
+        refreshButton.parentElement.removeChild(refreshButton);
+      }
+
+      if (feedbackLoop) window.clearInterval(feedbackLoop);
+      if (feedbackObserver) {
+        feedbackObserver.disconnect();
+      }
+    };
+  }, []);
 
   return (
-    <div className="space-y-6">
-      {/* 제목/설명 (normal이면 숨김) */}
-      {type !== "normal" && (
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-white">{title}</h2>
-            <p className="text-gray-400" onMouseEnter={blockTranslationFeedback}>
-              {description}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Admin: featured / events 업로드 버튼 (gallery/normal은 숨김) */}
-      {isAdmin && (type === "featured" || type === "events") && (
-        <div className="flex justify-end">
-          {type === "featured" ? (
-            <Button
-              className="bg-blue-600 text-white hover:bg-blue-700"
-              onClick={() => setFeaturedDialogOpen(true)}
-              onMouseEnter={blockTranslationFeedback}
-            >
-              + Add Featured
-            </Button>
-          ) : (
-            <Button
-              className="bg-blue-600 text-white hover:bg-blue-700"
-              onClick={() => setEventsDialogOpen(true)}
-              onMouseEnter={blockTranslationFeedback}
-            >
-              + Add Event
-            </Button>
-          )}
-        </div>
-      )}
-
-      {onBack && (
-        <Button
-          variant="outline"
-          onClick={onBack}
-          className="bg-[#2e2e2e] text-white hover:bg-[#444] border border-gray-700 hover:border-gray-500 transition"
-          onMouseEnter={blockTranslationFeedback}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          뒤로가기
-        </Button>
-      )}
-
-      {/* 가로 스크롤 카드 행 (전체 필드 포함) */}
-      <div ref={scrollerRef} className="flex flex-row gap-4 overflow-x-auto py-4 px-2">
-        {items.length === 0 ? (
-          type !== "normal" && (
-            <div className="col-span-full">
-              <Card className="bg-gray-800 border-gray-700">
-                <CardContent className="p-8 text-center text-gray-400">
-                  {"아직 업로드된 갤러리 아이템이 없습니다."}
-                </CardContent>
-              </Card>
-            </div>
-          )
-        ) : (
-          items.map((item, index) => (
-            <Card
-              key={item.id}
-              className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-[220px] sm:w-[256px] md:w-[280px] lg:w-[320px] flex-none relative ${
-                type === "featured" ? "featured-glow-card" : type === "events" ? "events-card" : "allapps-glow-card"
-              } ${type === "events" ? "bg-black sm:bg-[#D1E2EA]" : "bg-[#D1E2EA]"}`}
-              onMouseEnter={blockTranslationFeedback}
-            >
-              <div className="relative">
-                {/* Screenshot/App Preview - match New Release sizing (310x310 box) */}
-                <div className="relative pt-1">
-                  <div className="mx-auto w-[206px] h-[206px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] lg:w-[310px] lg:h-[310px] rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-[3px]">
-                    <div className="relative w-full h-full overflow-hidden rounded-lg">
-                      {/* Numbering overlay for events */}
-                      {type === "events" && (
-                        <div className="absolute top-2 left-2 z-10">
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-500/95 text-white flex items-center justify-center font-extrabold text-2xl sm:text-3xl shadow-lg border-2 border-white">
-                            {index + 1}
-                          </div>
-                        </div>
-                      )}
-
-                      {item.screenshotUrls && item.screenshotUrls.length > 0 ? (
-                        <Image
-                          src={item.screenshotUrls[0]}
-                          alt={item.name}
-                          fill
-                          unoptimized
-                          className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
-                          📱
-                        </div>
-                      )}
-
-                      {/* Status Badge (overlay on screenshot) */}
-                      <div className="absolute bottom-1 left-1">
-                        <Badge
-                          className={`text-white text-[10px] px-1 py-0.5 ${
-                            item.status === "published"
-                              ? "bg-blue-500"
-                              : item.status === "in-review"
-                              ? "bg-orange-500"
-                              : "bg-gray-500"
-                          }`}
-                        >
-                          {item.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Admin 버튼 */}
-                {isAdmin && (
-                  <div className="absolute top-2 right-2 flex gap-1">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-blue-600 hover:bg-blue-700 border-blue-600 text-white"
-                      onClick={() => console.log("Edit:", item.id)}
-                      onMouseEnter={blockTranslationFeedback}
-                    >
-                      <Edit className="h-2.5 w-2.5" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                      onClick={() => handleDelete(item.id)}
-                      onMouseEnter={blockTranslationFeedback}
-                    >
-                      <Trash2 className="h-2.5 w-2.5" />
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              <div className="mx-auto w-[206px] sm:w-[240px] md:w-[280px] lg:w-[310px]">
-              <CardContent className="p-[6px]" style={{ backgroundColor: "#D1E2EA" }}>
-                {/* App Icon and Basic Info */}
-                <div className="flex items-start space-x-4 mb-2">
-                  <Image
-                    src={item.iconUrl}
-                    alt={item.name}
-                    width={54}
-                    height={54}
-                    unoptimized
-                    className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] rounded-xl object-cover object-center flex-shrink-0"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src =
-                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik0xMiA2QzEwLjM0IDYgOSA3LjM0IDkgOUM5IDEwLjY2IDEwLjM0IDEyIDEyIDEyQzEzLjY2IDEyIDE1IDEwLjY2IDE1IDlDMTUgNy4zNCAxMy42NiA2IDEyIDZaTTEyIDRDMTQuNzYgNCAxNyA2LjI0IDE3IDlDMTcgMTEuNzYgMTQuNzYgMTQgMTIgMTRDOS4yNCAxNCA3IDExLjc2IDcgOUM3IDYuMjQgOS4yNCA0IDEyIDRaTTEyIDE2QzEwLjM0IDE2IDkgMTcuMzQgOSAxOUg3QzcgMTYuMjQgOS4yNCAxNCAxMiAxNEMxNC43NiAxNCAxNyAxNi4yNCAxNyAxOUgxNUMxNSAxNy4zNCAxMy42NiAxNiAxMiAxNloiIGZpbGw9IiM5Y2EzYWYiLz4KPC9zdmc+";
-                    }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm sm:text-xl md:text-xl mb-1 truncate notranslate text-sky-400" translate="no">
-                      {item.name}
-                    </h3>
-                    <p className="text-sm sm:text-base md:text-base text-muted-foreground truncate notranslate" translate="no">
-                      {item.developer}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Rating and Stats */}
-                <div className="flex items-center justify-between text-base text-muted-foreground mb-2">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span>{item.rating}</span>
-                    </div>
-                    <span>{item.downloads}</span>
-                  </div>
-                  <span>{item.version}</span>
-                </div>
-
-                {/* Tags */}
-                {item.tags && item.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {item.tags.slice(0, 2).map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm sm:text-base px-2.5 sm:px-3 py-0.5 sm:py-1">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {item.tags.length > 2 && (
-                      <span className="text-sm sm:text-base text-muted-foreground">+{item.tags.length - 2}</span>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-
-              {/* Download Section */}
-              <CardFooter className="w-full bg-[#84CC9A] border-t border-gray-300 px-2 py-1.5">
-                <div className="flex flex-col items-center space-y-1 w-full">
-                  {/* Download Button */}
-                  <div className="w-full sm:w-auto flex justify-center">
-                    {item.status === "published" ? (
-                      type === "events" ? (
-                        <Button
-                          size="sm"
-                          className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[100px] justify-start"
-                          onClick={() => {
-                            if (item.storeUrl) {
-                              window.open(item.storeUrl, "_blank");
-                            }
-                          }}
-                        >
-                          <User className="h-4 w-4" />
-                          See App
-                        </Button>
-                      ) : (
-                        <Button
-                          size="sm"
-                          className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 whitespace-nowrap min-w-[140px] sm:min-w-[100px] justify-start"
-                          onClick={() => {
-                            if (item.storeUrl) {
-                              window.open(item.storeUrl, "_blank");
-                            }
-                          }}
-                        >
-                          <Download className="h-4 w-4" />
-                          Download
-                        </Button>
-                      )
-                    ) : (
-                      <Button
-                        size="sm"
-                        className="h-9 px-5 text-base sm:h-6 sm:px-3 sm:text-sm bg-gray-500 text-white flex items-center gap-1 min-w-[140px] sm:min-w-[100px] justify-start"
-                        disabled
-                      >
-                        Coming soon
-                      </Button>
-                    )}
-                  </div>
-
-                  {/* Store Badge */}
-                  <div className="h-10 sm:h-6 flex justify-center">
-                    <Image
-                      src={item.store === "google-play" ? "/google-play-badge.png" : "/app-store-badge.png"}
-                      alt="스토어 배지"
-                      width={140}
-                      height={32}
-                      className="h-10 sm:h-6 object-contain"
-                    />
-                  </div>
-                </div>
-              </CardFooter>
-              </div>
-            </Card>
-          ))
-        )}
-      </div>
-
-      {/* 하단 금색 방향키 (< >) */}
-      <div className="flex items-center justify-center gap-4 -mt-2">
-        <Button
-          aria-label="왼쪽으로 스크롤"
-          className="rounded-full px-4 py-2 text-xl font-bold bg-[#D4AF37] text-black hover:bg-[#B9931E] focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-          onClick={() => scrollByStep(-1)}
-        >
-          &lt;
-        </Button>
-        <Button
-          aria-label="오른쪽으로 스크롤"
-          className="rounded-full px-4 py-2 text-xl font-bold bg-[#D4AF37] text-black hover:bg-[#B9931E] focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-          onClick={() => scrollByStep(1)}
-        >
-          &gt;
-        </Button>
-      </div>
-
-      {/* pagination removed for horizontal scroller */}
-
-      {/* 업로드 다이얼로그 (admin 전용): featured/events에서만 동작 */}
-      {isAdmin && type === "featured" && (
-        <AdminFeaturedUploadDialog
-          isOpen={isFeaturedDialogOpen}
-          onClose={() => setFeaturedDialogOpen(false)}
-          onUploadSuccess={() => {
-            setFeaturedDialogOpen(false);
-            loadItems();
-          }}
-          targetGallery={type}
-        />
-      )}
-      {isAdmin && type === "events" && (
-        <AdminEventsUploadDialog
-          isOpen={isEventsDialogOpen}
-          onClose={() => setEventsDialogOpen(false)}
-          onUploadSuccess={() => {
-            setEventsDialogOpen(false);
-            loadItems();
-          }}
-          targetGallery={type}
-        />
-      )}
-    </div>
+    <div
+      id="google_translate_element"
+      className="translate-widget-horizontal flex-shrink-0"
+      suppressHydrationWarning={true}
+    />
   );
 }
-export default GalleryManager;
