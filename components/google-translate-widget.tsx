@@ -215,6 +215,9 @@ export function GoogleTranslateWidget() {
       const options = Array.from(combo.options);
       const selectedValue = combo.value;
 
+      // ✅ 이벤트 트리거 방지를 위해 임시로 리스너 제거
+      combo.removeEventListener("change", handleComboChange);
+
       options.forEach((option) => {
         if (option.dataset.updated === "true") return;
 
@@ -236,17 +239,11 @@ export function GoogleTranslateWidget() {
       guideOption.text = "- English";
       guideOption.dataset.updated = "true";
       combo.appendChild(guideOption);
-      guideOption.selected = true;
-      combo.value = "";
 
       // 영어(en) 옵션 항상 두 번째
       const enOption = options.find((opt) => opt.value === "en");
       if (enOption) {
         combo.appendChild(enOption);
-        if (combo.value === "") {
-          enOption.selected = true;
-          combo.value = "en";
-        }
       }
 
       // 나머지 옵션 정렬
@@ -261,13 +258,26 @@ export function GoogleTranslateWidget() {
           if (!aIsDash && bIsDash) return 1;
           return a.text.localeCompare(b.text);
         });
+
       if (selectedOption) {
         combo.appendChild(selectedOption);
-        selectedOption.selected = false;
       }
       otherOptions.forEach((opt) => {
         combo.appendChild(opt);
       });
+
+      // ✅ 모든 옵션 작업 완료 후 선택 상태 설정 (이벤트 트리거 최소화)
+      guideOption.selected = true;
+      combo.value = "";
+
+      // 영어 옵션이 있으면 영어 선택
+      if (enOption && combo.value === "") {
+        enOption.selected = true;
+        combo.value = "en";
+      }
+
+      // ✅ 이벤트 리스너 다시 추가
+      combo.addEventListener("change", handleComboChange);
     }
     function hideFeedbackElements() {
       const feedbackSelectors = [
@@ -362,7 +372,8 @@ export function GoogleTranslateWidget() {
       const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
       if (!combo || combo.options.length < 2) return false;
 
-      updateLanguageOptions();
+      // updateLanguageOptions()는 googleTranslateElementInit에서 이미 호출됨
+      // 여기서는 이벤트 리스너만 설정
       hideFeedbackElements();
 
       combo.removeEventListener("change", handleComboChange);
@@ -469,7 +480,7 @@ if (typeof window.googleTranslateElementInit !== "function") {
     window.__widget_initialized = true; // 🎯 초기화 완료 플래그
 
     if (window.google?.translate?.TranslateElement) {
-      const { countryByLang, nativeByLang, includedLanguages } = buildMaps();
+      const { includedLanguages } = buildMaps();
     
 
 new window.google.translate.TranslateElement(
