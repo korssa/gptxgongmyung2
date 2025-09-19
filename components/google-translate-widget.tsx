@@ -249,32 +249,33 @@ export function GoogleTranslateWidget() {
         combo.value = "";
       }
 
-      // ✅ 스승님 지정 우선순위 언어들
-      const priority = ["en", "es", "fr", "de", "ar", "ru", "pt", "zh-CN", "ja", "ko"];
+      // ✅ 스승님 지정 우선순위 언어들 (영어 제외)
+      const priority = ["es", "fr", "de", "ar", "ru", "pt", "zh-CN", "ja", "ko"];
 
       const prioritizedOptions = priority
         .map((p) => options.find((opt) => normalizeCode(opt.value) === p))
         .filter((opt): opt is HTMLOptionElement => !!opt);
 
-      // ✅ 나머지 옵션 알파벳 정렬
+      // ✅ 나머지 옵션 알파벳 정렬 (우선순위 언어들 제외)
       const selectedCode = normalizeCode(selectedValue);
       const selectedOption = options.find(
-        (opt) => opt.value === selectedCode && selectedCode !== "" && !priority.includes(opt.value)
+        (opt) => opt.value === selectedCode && selectedCode !== "" && !priority.includes(normalizeCode(opt.value)) && normalizeCode(opt.value) !== "en"
       );
 
       const otherOptions = options
         .filter(
           (opt) =>
             !priority.includes(normalizeCode(opt.value)) &&
+            normalizeCode(opt.value) !== "en" &&
             opt.value !== selectedCode &&
             opt.value !== ""
         )
         .sort((a, b) => a.text.localeCompare(b.text));
 
-      // ✅ 우선순위 옵션 먼저 추가
+      // ✅ 우선순위 옵션 먼저 추가 (영어 제외)
       prioritizedOptions.forEach((opt) => combo.appendChild(opt));
 
-      // ✅ 선택된 옵션은 뒤에 추가
+      // ✅ 선택된 옵션은 뒤에 추가 (우선순위에 없는 경우)
       if (selectedOption) {
         combo.appendChild(selectedOption);
         selectedOption.selected = false;
