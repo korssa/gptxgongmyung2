@@ -284,6 +284,32 @@ export function GoogleTranslateWidget() {
       // ✅ 나머지 알파벳 순 옵션 추가
       otherOptions.forEach((opt) => combo.appendChild(opt));
     }
+
+    // ✅ PC 초기 선택 강제 보장 함수
+    function forceSelectEnglish(combo: HTMLSelectElement) {
+      const trySet = () => {
+        const enOpt = Array.from(combo.options).find(
+          (opt) => normalizeCode(opt.value) === "en"
+        );
+
+        if (enOpt && combo.options.length > 1) {
+          enOpt.selected = true;
+          combo.value = "en";
+          combo.dispatchEvent(new Event("change", { bubbles: true })); // ⚠️ 언어 변경 강제 반영
+          return true;
+        }
+        return false;
+      };
+
+      // 최대 10회까지 100ms 간격으로 시도
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (trySet() || attempts > 10) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
     function hideFeedbackElements() {
       const feedbackSelectors = [
         ".goog-te-balloon-frame",
@@ -382,6 +408,9 @@ export function GoogleTranslateWidget() {
 
       combo.removeEventListener("change", handleComboChange);
       combo.addEventListener("change", handleComboChange);
+
+      // ✅ PC 초기 선택 강제 보장 (추가)
+      forceSelectEnglish(combo);
 
       return true;
     }
@@ -500,6 +529,10 @@ new window.google.translate.TranslateElement(
 
 setTimeout(() => {
   updateLanguageOptions(); // ✅ 이걸 콤보 생성 직후 강제로 실행
+  
+  const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+  if (combo) forceSelectEnglish(combo); // ✅ PC 초기 선택 강제 보장
+  
 }, 300);
 // ✅ 초기 진입 시 라벨 매핑을 delay 후 강제 적용
 setTimeout(() => {
