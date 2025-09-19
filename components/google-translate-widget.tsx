@@ -310,6 +310,31 @@ export function GoogleTranslateWidget() {
         }
       }, 100);
     }
+
+    // ✅ Google 내부 로직 오버라이드 함수 (Shona 방지)
+    function forceTranslateToEnglish() {
+      const iframe = document.querySelector("iframe.goog-te-banner-frame");
+      if (iframe) return; // 이미 번역됨
+
+      const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (!combo) return;
+
+      const enOpt = Array.from(combo.options).find(opt => normalizeCode(opt.value) === "en");
+      if (enOpt) {
+        combo.value = "en";
+        enOpt.selected = true;
+        combo.dispatchEvent(new Event("change", { bubbles: true }));
+
+        // ✅ 강제로 번역 실행
+        const selectEvent = new Event("change", { bubbles: true });
+        combo.dispatchEvent(selectEvent);
+
+        // ✅ 캐시 막기 위해 로컬스토리지/세션스토리지/쿠키 초기화 (Shona 방지)
+        sessionStorage.removeItem("googtrans");
+        localStorage.removeItem("googtrans");
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      }
+    }
     function hideFeedbackElements() {
       const feedbackSelectors = [
         ".goog-te-balloon-frame",
@@ -411,6 +436,7 @@ export function GoogleTranslateWidget() {
 
       // ✅ PC 초기 선택 강제 보장 (추가)
       forceSelectEnglish(combo);
+      forceTranslateToEnglish(); // ✅ Google 내부 로직 오버라이드 (Shona 방지)
 
       return true;
     }
@@ -531,7 +557,10 @@ setTimeout(() => {
   updateLanguageOptions(); // ✅ 이걸 콤보 생성 직후 강제로 실행
   
   const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-  if (combo) forceSelectEnglish(combo); // ✅ PC 초기 선택 강제 보장
+  if (combo) {
+    forceSelectEnglish(combo); // ✅ PC 초기 선택 강제 보장
+    forceTranslateToEnglish(); // ✅ Google 내부 로직 오버라이드 (Shona 방지)
+  }
   
 }, 300);
 // ✅ 초기 진입 시 라벨 매핑을 delay 후 강제 적용
