@@ -311,7 +311,7 @@ export function GoogleTranslateWidget() {
       }, 100);
     }
 
-    // ✅ Google 내부 로직 오버라이드 함수 (Shona 방지)
+    // ✅ Google 내부 로직 오버라이드 함수 (Shona 방지 + 애니 보호)
     function forceTranslateToEnglish() {
       const iframe = document.querySelector("iframe.goog-te-banner-frame");
       if (iframe) return; // 이미 번역됨
@@ -329,11 +329,61 @@ export function GoogleTranslateWidget() {
         const selectEvent = new Event("change", { bubbles: true });
         combo.dispatchEvent(selectEvent);
 
-        // ✅ 캐시 막기 위해 로컬스토리지/세션스토리지/쿠키 초기화 (Shona 방지)
+        // ✅ 캐시 청소 전에 애니메이션 상태 백업 (보호할 키들)
+        const protectedKeys = ["my-anim-state", "anim-active", "translate-activated"]; // 애니 관련 키들 추가
+        const backups: Record<string, string> = {};
+        protectedKeys.forEach(key => {
+          const sessionVal = sessionStorage.getItem(key);
+          const localVal = localStorage.getItem(key);
+          if (sessionVal) backups[`session-${key}`] = sessionVal;
+          if (localVal) backups[`local-${key}`] = localVal;
+        });
+
+        // ✅ 캐시 청소 (googtrans만)
         sessionStorage.removeItem("googtrans");
         localStorage.removeItem("googtrans");
         document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        // ✅ 애니메이션 상태 복원
+        Object.entries(backups).forEach(([key, value]) => {
+          if (key.startsWith("session-")) {
+            sessionStorage.setItem(key.replace("session-", ""), value);
+          } else if (key.startsWith("local-")) {
+            localStorage.setItem(key.replace("local-", ""), value);
+          }
+        });
       }
+    // ✅ PC 강제 영어 선택 오버라이드 (쿠키/로컬스토리지 강제)
+    function overridePCTranslateToEnglish() {
+      const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (!combo) return;
+
+      const enOpt = Array.from(combo.options).find(opt => normalizeCode(opt.value) === "en");
+      if (!enOpt) return;
+
+      // ✅ 쿠키 덮어쓰기
+      document.cookie = "googtrans=/en/en; path=/;";
+
+      // ✅ 로컬스토리지 동기화
+      localStorage.setItem("googtrans", "/en/en");
+      sessionStorage.setItem("googtrans", "/en/en");
+
+      // ✅ 셀렉트 적용 + 이벤트 디스패치
+      combo.value = "en";
+      enOpt.selected = true;
+      combo.dispatchEvent(new Event("change", { bubbles: true }));
+
+      // ✅ 추가로 iframe 내부 번역 강제 (sandbox 우회)
+      setTimeout(() => {
+        const iframe = document.querySelector("iframe.goog-te-banner-frame") as HTMLIFrameElement | null;
+        if (iframe && iframe.contentWindow) {
+          try {
+            iframe.contentWindow.postMessage({ type: "setLanguage", language: "en" }, "*");
+          } catch (e) {
+            // iframe sandbox 제한 시 무시
+          }
+        }
+      }, 500);
     }
     function hideFeedbackElements() {
       const feedbackSelectors = [
@@ -437,6 +487,7 @@ export function GoogleTranslateWidget() {
       // ✅ PC 초기 선택 강제 보장 (추가)
       forceSelectEnglish(combo);
       forceTranslateToEnglish(); // ✅ Google 내부 로직 오버라이드 (Shona 방지)
+      overridePCTranslateToEnglish(); // ✅ PC 강제 영어 선택 추가
 
       return true;
     }
@@ -560,6 +611,7 @@ setTimeout(() => {
   if (combo) {
     forceSelectEnglish(combo); // ✅ PC 초기 선택 강제 보장
     forceTranslateToEnglish(); // ✅ Google 내부 로직 오버라이드 (Shona 방지)
+    overridePCTranslateToEnglish(); // ✅ PC 강제 영어 선택 추가
   }
   
 }, 300);
