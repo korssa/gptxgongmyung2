@@ -353,6 +353,7 @@ export function GoogleTranslateWidget() {
           }
         });
       }
+    }
     // ✅ PC 강제 영어 선택 오버라이드 (쿠키/로컬스토리지 강제)
     function overridePCTranslateToEnglish() {
       const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
@@ -379,7 +380,7 @@ export function GoogleTranslateWidget() {
         if (iframe && iframe.contentWindow) {
           try {
             iframe.contentWindow.postMessage({ type: "setLanguage", language: "en" }, "*");
-          } catch (e) {
+          } catch {
             // iframe sandbox 제한 시 무시
           }
         }
@@ -590,7 +591,7 @@ if (typeof window.googleTranslateElementInit !== "function") {
     window.__widget_initialized = true; // 🎯 초기화 완료 플래그
 
     if (window.google?.translate?.TranslateElement) {
-      const { countryByLang, nativeByLang, includedLanguages } = buildMaps();
+      const { includedLanguages } = buildMaps();
     
 
 new window.google.translate.TranslateElement(
