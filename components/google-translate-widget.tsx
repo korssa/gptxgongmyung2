@@ -226,165 +226,48 @@ export function GoogleTranslateWidget() {
 
         option.text = `${country} - ${native}`;
         option.dataset.updated = "true";
-        option.value = code;
+        option.value = code; // ✅ 정규화된 코드로 교체
       });
 
-      // 안내 옵션(- English)을 항상 맨 위에 추가
+      // 안내 옵션(- English)을 항상 맨 위에 추가 (중복 방지)
       combo.innerHTML = "";
-      const guideOption = document.createElement("option");
+      const guideOption = document.createElement('option');
       guideOption.value = "";
       guideOption.text = "- English";
       guideOption.dataset.updated = "true";
       combo.appendChild(guideOption);
+      guideOption.selected = true;
+      combo.value = "";
 
-      // ✅ 영어(en)를 무조건 두 번째에 추가 + 기본 선택
-      const enOption = options.find((opt) => normalizeCode(opt.value) === "en");
+      // 영어(en) 옵션 항상 두 번째
+      const enOption = options.find((opt) => opt.value === "en");
       if (enOption) {
         combo.appendChild(enOption);
-        enOption.selected = true; // <-- 기본 선택
-        combo.value = "en"; // <-- 값도 en으로 강제
-      } else {
-        // fallback: 만약 영어가 없으면 안내 옵션 선택
-        guideOption.selected = true;
-        combo.value = "";
+        if (combo.value === "") {
+          enOption.selected = true;
+          combo.value = "en";
+        }
       }
 
-      // ✅ 스승님 지정 우선순위 언어들 (영어 제외)
-      const priority = ["es", "fr", "de", "ar", "ru", "pt", "zh-CN", "ja", "ko"];
-
-      const prioritizedOptions = priority
-        .map((p) => options.find((opt) => normalizeCode(opt.value) === p))
-        .filter((opt): opt is HTMLOptionElement => !!opt);
-
-      // ✅ 나머지 옵션 알파벳 정렬 (우선순위 언어들 제외)
+      // 나머지 옵션 정렬
       const selectedCode = normalizeCode(selectedValue);
-      const selectedOption = options.find(
-        (opt) => opt.value === selectedCode && selectedCode !== "" && !priority.includes(normalizeCode(opt.value)) && normalizeCode(opt.value) !== "en"
-      );
-
+      const selectedOption = options.find((opt) => opt.value === selectedCode && selectedCode !== "" && selectedCode !== "en");
       const otherOptions = options
-        .filter(
-          (opt) =>
-            !priority.includes(normalizeCode(opt.value)) &&
-            normalizeCode(opt.value) !== "en" &&
-            opt.value !== selectedCode &&
-            opt.value !== ""
-        )
-        .sort((a, b) => a.text.localeCompare(b.text));
-
-      // ✅ 우선순위 옵션 먼저 추가 (영어 제외)
-      prioritizedOptions.forEach((opt) => combo.appendChild(opt));
-
-      // ✅ 선택된 옵션은 뒤에 추가 (우선순위에 없는 경우)
+        .filter((opt) => opt.value !== selectedCode && opt.value !== "" && opt.value !== "en")
+        .sort((a, b) => {
+          const aIsDash = a.text.trim().startsWith("-");
+          const bIsDash = b.text.trim().startsWith("-");
+          if (aIsDash && !bIsDash) return -1;
+          if (!aIsDash && bIsDash) return 1;
+          return a.text.localeCompare(b.text);
+        });
       if (selectedOption) {
         combo.appendChild(selectedOption);
         selectedOption.selected = false;
       }
-
-      // ✅ 나머지 알파벳 순 옵션 추가
-      otherOptions.forEach((opt) => combo.appendChild(opt));
-    }
-
-    // ✅ PC 초기 선택 강제 보장 함수
-    function forceSelectEnglish(combo: HTMLSelectElement) {
-      const trySet = () => {
-        const enOpt = Array.from(combo.options).find(
-          (opt) => normalizeCode(opt.value) === "en"
-        );
-
-        if (enOpt && combo.options.length > 1) {
-          enOpt.selected = true;
-          combo.value = "en";
-          combo.dispatchEvent(new Event("change", { bubbles: true })); // ⚠️ 언어 변경 강제 반영
-          return true;
-        }
-        return false;
-      };
-
-      // 최대 10회까지 100ms 간격으로 시도
-      let attempts = 0;
-      const interval = setInterval(() => {
-        attempts++;
-        if (trySet() || attempts > 10) {
-          clearInterval(interval);
-        }
-      }, 100);
-    }
-
-    // ✅ Google 내부 로직 오버라이드 함수 (Shona 방지 + 애니 보호)
-    function forceTranslateToEnglish() {
-      const iframe = document.querySelector("iframe.goog-te-banner-frame");
-      if (iframe) return; // 이미 번역됨
-
-      const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-      if (!combo) return;
-
-      const enOpt = Array.from(combo.options).find(opt => normalizeCode(opt.value) === "en");
-      if (enOpt) {
-        combo.value = "en";
-        enOpt.selected = true;
-        combo.dispatchEvent(new Event("change", { bubbles: true }));
-
-        // ✅ 강제로 번역 실행
-        const selectEvent = new Event("change", { bubbles: true });
-        combo.dispatchEvent(selectEvent);
-
-        // ✅ 캐시 청소 전에 애니메이션 상태 백업 (보호할 키들)
-        const protectedKeys = ["my-anim-state", "anim-active", "translate-activated"]; // 애니 관련 키들 추가
-        const backups: Record<string, string> = {};
-        protectedKeys.forEach(key => {
-          const sessionVal = sessionStorage.getItem(key);
-          const localVal = localStorage.getItem(key);
-          if (sessionVal) backups[`session-${key}`] = sessionVal;
-          if (localVal) backups[`local-${key}`] = localVal;
-        });
-
-        // ✅ 캐시 청소 (googtrans만)
-        sessionStorage.removeItem("googtrans");
-        localStorage.removeItem("googtrans");
-        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-        // ✅ 애니메이션 상태 복원
-        Object.entries(backups).forEach(([key, value]) => {
-          if (key.startsWith("session-")) {
-            sessionStorage.setItem(key.replace("session-", ""), value);
-          } else if (key.startsWith("local-")) {
-            localStorage.setItem(key.replace("local-", ""), value);
-          }
-        });
-      }
-    }
-    // ✅ PC 강제 영어 선택 오버라이드 (쿠키/로컬스토리지 강제)
-    function overridePCTranslateToEnglish() {
-      const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-      if (!combo) return;
-
-      const enOpt = Array.from(combo.options).find(opt => normalizeCode(opt.value) === "en");
-      if (!enOpt) return;
-
-      // ✅ 쿠키 덮어쓰기
-      document.cookie = "googtrans=/en/en; path=/;";
-
-      // ✅ 로컬스토리지 동기화
-      localStorage.setItem("googtrans", "/en/en");
-      sessionStorage.setItem("googtrans", "/en/en");
-
-      // ✅ 셀렉트 적용 + 이벤트 디스패치
-      combo.value = "en";
-      enOpt.selected = true;
-      combo.dispatchEvent(new Event("change", { bubbles: true }));
-
-      // ✅ 추가로 iframe 내부 번역 강제 (sandbox 우회)
-      setTimeout(() => {
-        const iframe = document.querySelector("iframe.goog-te-banner-frame") as HTMLIFrameElement | null;
-        if (iframe && iframe.contentWindow) {
-          try {
-            iframe.contentWindow.postMessage({ type: "setLanguage", language: "en" }, "*");
-          } catch {
-            // iframe sandbox 제한 시 무시
-          }
-        }
-      }, 500);
+      otherOptions.forEach((opt) => {
+        combo.appendChild(opt);
+      });
     }
     function hideFeedbackElements() {
       const feedbackSelectors = [
@@ -484,11 +367,6 @@ export function GoogleTranslateWidget() {
 
       combo.removeEventListener("change", handleComboChange);
       combo.addEventListener("change", handleComboChange);
-
-      // ✅ PC 초기 선택 강제 보장 (추가)
-      forceSelectEnglish(combo);
-      forceTranslateToEnglish(); // ✅ Google 내부 로직 오버라이드 (Shona 방지)
-      overridePCTranslateToEnglish(); // ✅ PC 강제 영어 선택 추가
 
       return true;
     }
@@ -591,7 +469,7 @@ if (typeof window.googleTranslateElementInit !== "function") {
     window.__widget_initialized = true; // 🎯 초기화 완료 플래그
 
     if (window.google?.translate?.TranslateElement) {
-      const { includedLanguages } = buildMaps();
+      const { countryByLang, nativeByLang, includedLanguages } = buildMaps();
     
 
 new window.google.translate.TranslateElement(
@@ -607,14 +485,6 @@ new window.google.translate.TranslateElement(
 
 setTimeout(() => {
   updateLanguageOptions(); // ✅ 이걸 콤보 생성 직후 강제로 실행
-  
-  const combo = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-  if (combo) {
-    forceSelectEnglish(combo); // ✅ PC 초기 선택 강제 보장
-    forceTranslateToEnglish(); // ✅ Google 내부 로직 오버라이드 (Shona 방지)
-    overridePCTranslateToEnglish(); // ✅ PC 강제 영어 선택 추가
-  }
-  
 }, 300);
 // ✅ 초기 진입 시 라벨 매핑을 delay 후 강제 적용
 setTimeout(() => {
